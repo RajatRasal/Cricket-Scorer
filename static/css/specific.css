@@ -1,0 +1,38 @@
+body, h1, h2, h3, h4, h5, h6 {
+	font-family: "Montserrat", sans-serif;
+}
+
+.w3-row-padding, img {
+	margin-bottom: 12px;
+}
+
+/* Set the width of the sidenav to 120px */
+.w3-sidenav {
+	width: 120px;
+	background: #222;
+}
+
+/* Add a left margin to the "page content" that matches the width of the sidenav   (120px) */
+#main {
+	margin-left: 120px;
+}
+
+button {
+	background-color: Transparent;
+	background-repeat: no-repeat;
+	border: none;
+	cursor:pointer;
+	overflow: hidden;
+	outline:none;
+}
+
+.glyphicon {
+	color: white;
+}
+
+#sidebar-button, #header-button {
+	color: white;
+}
+
+/* Remove margins from "page content" on small screens */
+@media only screen and (max-width: 600px) {#main {margin-left: 0}}

@@ -1,0 +1,159 @@
+{% load staticfiles %}
+
+<!-- inspiration from http://www.w3schools.com/w3css/tryw3css_templates_dark_portfolio.htm --> 
+<html>
+<head>
+	<title>Cricket Scorer</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen"/>
+	<link href="{% static 'css/w3.css' %}" rel="stylesheet" media="screen"/>
+	<link href="{% static 'css/font1.css' %}" rel="stylesheet" media="screen"/>
+	<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+	<link href="{% static 'css/specific.css' %}" rel="stylesheet" media="screen"/>
+</head>
+
+<body class="w3-black">
+
+<!-- Icon Bar (Sidenav - hidden on small screens) -->
+<nav class="w3-sidenav w3-center w3-small w3-hide-small w3-text-light-grey">
+<!-- Avatar image in top left corner -->
+	<img src="http://img.cricinfo.com/espncricinfo/cricket_monthly/Shot_Stories_image.jpg" style="width:100%">
+	<a class="w3-padding-small w3-black">
+	</a>
+	<a class="w3-padding-large w3-black" href="#"><!-- href= may be useful for navigation back to the home page-->
+		<i class="glyphicon glyphicon-home w3-xxlarge"></i>
+		<p id="sidebar-button">HOME</p>
+	</a>
+	<a class="w3-padding-large w3-hover-black">
+		<button type="button" data-toggle="modal" data-target="#user-manual" id="sidebar-button">
+		<i class="glyphicon glyphicon-user w3-xxlarge w3-hover-black"></i>
+			USER MANUAL</button>
+	</a>
+	<a class="w3-padding-large w3-hover-black">
+		<button type="button" data-toggle="modal" data-target="#scoring-guide" id="sidebar-button">
+		<i class="glyphicon glyphicon-grain w3-xxlarge w3-hover-black"></i>
+			SCORING GUIDE</button>
+	</a>
+	<a class="w3-padding-large w3-hover-black">
+		<button type="button" data-toggle="modal" data-target="#contact" id="sidebar-button">
+		<i class="glyphicon glyphicon-envelope w3-xxlarge w3-hover-black"></i>
+			CONTACT</button>
+	</a>
+</nav>
+
+<!-- modal button display -->
+	<div class="modal fade" id="scoring-guide" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">SCORING-GUIDE MODAL BOX</h4>
+				</div>
+				<div class="modal-body">
+					<p>This contains the body of a modal text box</p>
+				</div>
+				<div class="modal-footer">
+					<p>MODAL FOOTER</p>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="user-manual" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">User Manual Popup</h4>
+				</div>
+				<div class="modal-body">
+					<p>This contains the body of a modal text box</p>
+				</div>
+				<div class="modal-footer">
+					<p>MODAL FOOTER</p>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="contact" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Contact Developer Popup</h4>
+				</div>
+				<div class="modal-body">
+					<!-- Contact Section -->
+					<div class="w3-content w3-text-grey" id="contact">
+						<h2 class="w3-text-grey" align="center">Contact Me</h2>
+						<hr style="width:270px" class="w3-opacity">
+						
+						<div class="w3-section">
+							<p><i class="glyphicon glyphicon-map-marker w3-text-black w3-xxlarge w3-margin-right"></i> London, UK</p>
+							<p><i class="glyphicon glyphicon-envelope w3-text-black w3-xxlarge w3-margin-right"> </i> Email: 123@xyz.com</p>
+						</div><br>
+						<p>Lets get in touch. Send me a message:</p>
+						
+						<form action="form.asp" target="_blank">
+							<p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
+							<p><input class="w3-input w3-padding-16" type="text" placeholder="Email" required name="Email"></p>
+							<p><input class="w3-input w3-padding-16" type="text" placeholder="Subject" required name="Subject"></p>
+							<p><input class="w3-input w3-padding-16" type="text" placeholder="Message" required name="Message"></p>
+							<p align="center">
+							<br>
+							<button class="w3-btn w3-light-grey w3-padding-large" type="submit">
+								SEND MESSAGE
+							</button>
+							</p>
+						</form>
+					</div>
+					<!-- End Contact Section -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<!-- Navbar on small screens (Hidden on medium and large screens) -->
+<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+	<ul class="w3-navbar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
+		<li class="w3-left" style="width:25% !important"><a id="header-button">HOME</a>
+		</li>
+		<li class="w3-left" style="width:25% !important">
+			<a data-toggle="modal" data-target="#user-manual" id="header-button">USER MANUAL</a>
+		</li>
+		<li class="w3-left" style="width:25% !important">
+			<a data-toggle="modal" data-target="#scoring-guide" id="header-button">SCORING GUIDE</a>
+		</li>
+		<li class="w3-left" style="width:25% !important">
+			<a data-toggle="modal" data-target="#contact" id="header-button">CONTACT</a>
+		</li>
+	</ul>
+</div>
+
+<!-- Page Content -->
+<div class="w3-padding-large" id="main">
+	{% block content %}
+	{% endblock %}
+</div>
+
+<!-- Footer -->
+<footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
+	<p class="w3-medium" align="right">Powered by <a href="http://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+<!-- End footer -->
+
+<!-- END PAGE CONTENT -->
+
+</body>
+</html>
+
