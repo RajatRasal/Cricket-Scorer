@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import View
-#from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+
+from searching.forms import TeamnameSearchForm
 
 class Base(View):
     
@@ -10,4 +12,6 @@ class Base(View):
 class Index(View):
 
     def get(self, request):
-        return render(request, 'index.html')
+        form = TeamnameSearchForm()
+        return render(request, 'index.html', {'form': form})
+

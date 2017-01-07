@@ -143,8 +143,13 @@
 <!-- Page Content -->
 <div class="w3-padding-large" id="main">
 	{% block content %}
+
 	{% endblock %}
 </div>
+
+<script src="{% static 'js/base.js' %}"></script>
+{% block js %}
+{% endblock %}
 
 <!-- Footer -->
 <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">

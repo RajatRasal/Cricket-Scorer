@@ -34,5 +34,10 @@ button {
 	color: white;
 }
 
+.input-group {
+	border: 2px solid #a1a1a1;
+	border-radius: 5px;
+}
+
 /* Remove margins from "page content" on small screens */
 @media only screen and (max-width: 600px) {#main {margin-left: 0}}
