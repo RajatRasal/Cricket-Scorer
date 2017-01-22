@@ -29,13 +29,14 @@
 				<div class="w3-content w3-text-grey"> 
 					<h2 class="w3-text-grey" align="center">Select Home Team</h2>
 					<hr style="width:560px" class="w3-opacity">
-					<form method="POST" action="" target="_blank">
+					<form method="POST" id="team-name-form"> <!--action="" target="_blank" id="team-name-form"-->
 						{% csrf_token %}
 						<div class="w3-section">
 							<div class="input-group input-group-sm">
-								{{ Teamname_Form.as_p }}
+								{{ teamname_form.as_p }}
+								<!--id of teamname input field is 
 								<span class="input-group-btn">
-								<button class='btn btn-search' type="submit">Search</button>
+									<button class='btn btn-search' type="submit">Search</button>
 								</span>
 							</div>
 							<div>
@@ -132,7 +133,7 @@
 						{% csrf_token %}
 						<div class="w3-section">
 							<div class="input-group input-group-sm">
-								{{ Teamname_Form.as_p }}
+								{{ teamname_form.as_p }}
 								<span class="input-group-btn">
 								<button class='btn btn-search' type="submit">Search</button>
 								</span>
@@ -231,8 +232,8 @@
 					<form method="POST" action="" target="_blank">
 						{% csrf_token %}
 						<div class="w3-section">
-								{{ MatchDetailsForm.as_p }}
-								{{ MatchDetailsText.as_p }}
+								{{ match_details_form.as_p }}
+								{{ match_details_test_form.as_p }}
 							<div>
 								<div class="col-md-12 column tweets"><!--Use this space for data input--></div>
 							</div>
@@ -247,6 +248,27 @@
 	</div>
 </div>
 
+{% endblock %}
 
+
+
+{% block body_js %}
+
+<script type="text/javascript">
+
+	$(document).on('submit', '#team-name-form', function(e){
+			e.preventDefault();
+
+			$.ajax({
+type:'POST'
+url:'/teamnamesubmit/',
+data:{
+team_name:$('#
+
+			}
+
+</script>
 
 {% endblock %}
+
+
