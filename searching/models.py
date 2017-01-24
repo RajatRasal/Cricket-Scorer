@@ -1,6 +1,14 @@
+"""
+Django uses an ORM (Object-Relation Mapper) to create database models. This means that 
+that each child class which inherits from models.Model parent will be converted to a table
+and each attribute (variable) in it will be treated as a field in the table. This conversion
+between Python code and SQLite syntax occurs when I run the 'python3 manage.py makemigrations'
+in the command line. I must then run 'python3 manage.py migrate' in order to run the 
+SQLite commands that have been created by the previous shell command. 
+"""
+
 from django.db import models
 
-# Create your models here.
 class Team(models.Model):
 	"""
 	Table in the database containing a list of all the teams that 
@@ -15,7 +23,14 @@ class Team(models.Model):
 	home_ground = models.CharField(max_length=50, blank=True)
 
 	def __str__(self):
-		return self.team_name, self.home_ground
+                """
+                When a 'Team' record/object is referred to in the Django admin view, we
+                cannot display everything in the record. The value returned by this 
+                function will be the value seen. So in this case, to represent a 'Team' 
+                instance, you will see the value stored in the 'team_name' field for 
+                that record. 
+                """
+                return self.team_name
 	
 class Match(models.Model):
 	"""
@@ -43,12 +58,18 @@ class Match(models.Model):
 	weather = models.CharField(
 			max_length=30,
 			choices = (
-			('choice1', 'Sunny'),
-			('choice2', 'Windy'),
-			('choice3', 'Showers'),
-			('choice4', 'Heavy Rain'),
+			('0', ' '),
+			('1', 'sunny'),
+			('2', 'sunny spells'),
+			('3', 'windy'),
+			('4', 'showers'),
+			('5', 'heavy rain'),
+			('6', 'rain and sun'),
+			('7', 'cloudy'),
+			('8', 'overcast'),
+			('9', 'other'),
 			),
-			default='choice1',
+			default='0',
 			)
 	#The 2 possible options will be the 2 team names 
 	#that have already been selected.

@@ -1,4 +1,11 @@
 {% extends './base.html' %}
+{% load staticfiles %}
+
+{% comment %} http://www.webhook.com/docs/template-inheritance-blocks/ {% endcomment %}
+
+{% block head_js %}
+	<script type="text/javascript" src="{% static 'js/ajax.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <!-- Page Content -->
@@ -33,14 +40,32 @@
 						{% csrf_token %}
 						<div class="w3-section">
 							<div class="input-group input-group-sm">
+								{% comment %}
 								{{ teamname_form.as_p }}
-								<!--id of teamname input field is 
+								{% endcomment %}
+								<input type="text" id="team-name-search"/>
 								<span class="input-group-btn">
-									<button class='btn btn-search' type="submit">Search</button>
+								<button class='btn btn-search'></button>
 								</span>
 							</div>
 							<div>
-								<div class="col-md-12 column tweets"><!--Use this space for data input--></div>
+								<div class="col-md-12 column tweets">
+									<ul id="search-results">
+										{% include 'ajax_team_search.html' %}
+										{% comment %}{SEARCH RESULTS}
+										<span>here</span>
+										{% if team_names.count > 0 %}
+										
+										{% for name in team_names %}
+											<li>{{ name.team_name }}</li>
+										{% endfor %}
+
+										{% else %}
+											<li>None to show!</li>
+										{% endif %}
+										{% endcomment %}
+									</ul>
+								</div>
 							</div>
 						</div><br>
 					</form>
@@ -233,7 +258,6 @@
 						{% csrf_token %}
 						<div class="w3-section">
 								{{ match_details_form.as_p }}
-								{{ match_details_test_form.as_p }}
 							<div>
 								<div class="col-md-12 column tweets"><!--Use this space for data input--></div>
 							</div>
@@ -249,26 +273,4 @@
 </div>
 
 {% endblock %}
-
-
-
-{% block body_js %}
-
-<script type="text/javascript">
-
-	$(document).on('submit', '#team-name-form', function(e){
-			e.preventDefault();
-
-			$.ajax({
-type:'POST'
-url:'/teamnamesubmit/',
-data:{
-team_name:$('#
-
-			}
-
-</script>
-
-{% endblock %}
-
 

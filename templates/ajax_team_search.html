@@ -1,0 +1,14 @@
+<span>here</span>
+{% autoescape off %}{{ team_names }}{% endautoescape %} 
+{% if team_names.count > 0 %}
+
+{% for name in team_names %}
+	<li>{{ name.team_name }}</li>
+{% endfor %}
+
+{% else %}
+
+<li>None to show!</li>
+
+{% endif %}
+
