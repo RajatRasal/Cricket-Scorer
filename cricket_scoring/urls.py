@@ -15,7 +15,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from searching.views import Base, Index, TeamSearch	
+from searching.views import Base, Index, TeamSearch, AjaxTest	
 
 admin.autodiscover()
 
@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^$', Base.as_view()),
     url(r'^startpage/$', Index.as_view()),
     url(r'^teamsearch/$', TeamSearch.as_view()),
+    url(r'^ajax_test/$', AjaxTest.as_view())
 ]

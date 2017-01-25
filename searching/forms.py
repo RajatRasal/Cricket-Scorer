@@ -23,3 +23,14 @@ class MatchDetailsForm(forms.ModelForm):
     class Meta:
 	    model = Match
 	    fields = ['ground_location', 'umpire_1', 'umpire_2', 'weather']
+
+class AjaxTestForm(forms.Form):
+
+	query = forms.CharField(
+			label='Enter team name:',
+			widget=forms.TextInput(
+				attrs={
+					'size': 32,
+					'class': 'form-control'
+					})
+				)
