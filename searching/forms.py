@@ -6,13 +6,13 @@ class TeamnameSearchForm(forms.Form):
     """
     """
 
-    text = forms.CharField(
+    query = forms.CharField(
             widget=forms.TextInput(attrs={
-                'placeholder':'Enter the home team name', 
+                'placeholder':'Enter team name', 
                 'class':'form-control', 
-                'index':'team-name-search',
+                'id':'team-name-search',
+                'size': 160
                 }), 
-            max_length=160,
             label=False 
             )
 
@@ -30,6 +30,7 @@ class AjaxTestForm(forms.Form):
 			label='Enter team name:',
 			widget=forms.TextInput(
 				attrs={
+                                        'id': 'search-input',
 					'size': 32,
 					'class': 'form-control'
 					})

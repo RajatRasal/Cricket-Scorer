@@ -1,0 +1,10 @@
+{% for team_data in team_names %}
+	<button type="button" class="well btn btn-secondary btn-lg btn-block" 
+		       id="returned-team-name" onclick="DisplayNext()">{{ team_data }}</button>
+{% endfor %}
+
+{% if not team_names %}
+	<div class="well">No Team Found</div>
+{% endif %}
+
+
