@@ -4,7 +4,7 @@
 $(document).ready(function(){
 	alert('page loaded');
 	$(".next-button").hide();
-	$("#team-name-selection-input").hide();
+	$("input#team-name-selection-input").hide();
 });
 
 //Called by event handlers from various html elements. 
@@ -20,6 +20,7 @@ function DisplayNext() {
 //Will often be called when a new modal box is opened.
 function HideNext() {
 	$(".next-button").hide();
+	$('div#team-name-selection-div').html(' ');
 };
 
 //This will empty any the team members selected from either team, 
@@ -96,10 +97,10 @@ function PlayerNameToggle(sender){
 			DisplayNext();
 		}
 	}
-	//alert('HOME TEAM');
-	//alert(home_team);
-	//alert('AWAY TEAM');
-	//alert(away_team);	
+	alert('HOME TEAM');
+	alert(home_team);
+	alert('AWAY TEAM');
+	alert(away_team);	
 };
 
 function CheckIfPlayerInTeam(player_name, team_name){
