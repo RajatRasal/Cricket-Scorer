@@ -1,6 +1,10 @@
-{% for team_data in team_names %}
-	<button type="button" class="well btn btn-secondary btn-lg btn-block" 
-		       id="returned-team-name" onclick="DisplayNext()">{{ team_data }}</button>
+{% for team_name in team_names %}
+	<button type="button" 
+                class="well btn btn-secondary btn-lg btn-block" 
+                id="returned-team-name" 
+                value="{{ team_name }}"
+		onclick="SubmitTeamName(this.value); DisplayNext();">{{ team_name }}
+        </button>
 {% endfor %}
 
 {% if not team_names %}

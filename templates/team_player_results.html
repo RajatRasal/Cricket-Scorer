@@ -1,0 +1,9 @@
+{% for player_name in player_names %}
+<div class="panel-body" 
+	id="player-name" 
+	onclick="PlayerNameToggle(this)" 
+	value="{{ player_name }}">
+	{{ player_name }}
+</div>
+{% endfor %}
+

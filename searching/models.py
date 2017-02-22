@@ -77,3 +77,42 @@ class Match(models.Model):
 
 	def __str__(self):
 		return self.away_team 
+
+class Player(models.Model):
+    """
+    Table in the database containing the details of each player
+    which will have compiled statistics how each player has 
+    performed in the matches they have played. Also includes 
+    the data about which club a player is playing for and their name
+    """
+
+    #field in the table which have stored player metadata
+    player_name = models.CharField(max_length=50, default='NO NAME GIVEN')
+    current_team_name = models.ForeignKey(Team, on_delete=models.PROTECT, default=0)
+    matches_played = models.PositiveIntegerField(null=True, blank=True)
+
+    #fields which store compiled batting match statistics
+    #these will be compiled by a views.py function
+    batting_total_runs_scored = models.PositiveIntegerField(null=True, blank=True)
+    batting_inning = models.PositiveIntegerField(null=True, blank=True)
+    batting_high_score = models.PositiveIntegerField(null=True, blank=True)
+    batting_average = models.FloatField(null=True, blank=True)
+    batting_strike_rate = models.FloatField(null=True, blank=True)
+    batting_50s = models.PositiveIntegerField(null=True, blank=True)
+    batting_100s = models.PositiveIntegerField(null=True, blank=True)
+
+    #fields which store compiled bowling match statistics
+    #these will be compiled by a views.py function
+    bowling_total_balls_faced = models.PositiveIntegerField(null=True, blank=True)
+    bowling_runs_conceded = models.PositiveIntegerField(null=True, blank=True)
+    bowling_wickets = models.PositiveIntegerField(null=True, blank=True)
+    bowling_best_figures = models.CharField(max_length=10, default='NA')
+    bowling_average = models.FloatField(null=True, blank=True)
+    bowling_strike_rate = models.FloatField(null=True, blank=True)
+    bowling_economy = models.FloatField(null=True, blank=True)
+    bowling_5ws = models.PositiveIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.player_name
+
+
