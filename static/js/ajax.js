@@ -17,7 +17,7 @@ $('#search-form').submit(function(e){
 //When the form with the id 'team-name-search-form' is submitted,
 //the below function is called.  
 $('form#team-name-search-form').submit(function(e){
-		alert('team searched');
+		//alert('team searched');
 		//alert($(this).serialize());
 		//alert($(this).attr('class'));
 	//This is an AJAX routine. It will make a post request to the URL
@@ -39,7 +39,7 @@ $('form#team-name-search-form').submit(function(e){
 
 //same as above but only for player search instead of team search 
 $('form#player-name-search-form').submit(function(e){
-		alert('players searched');
+		//alert('players searched');
 		$.post('/player_search/', $(this).serialize(), function(data){
 			$('div#player-name-selection-div').html(data);
 		}); 
@@ -51,13 +51,13 @@ function SubmitName(name){
 	//alert(team_name);
 
 	//$("input.home-team#hidden-input").val(team_name);
-	alert('VALUE OF CLICKED BUTTON')
-	alert($(name).attr('value'));
+	//alert('VALUE OF CLICKED BUTTON')
+	//alert($(name).attr('value'));
 	$("input#hidden-input").val($(name).attr('value'));
 	//These hidden input fields will always be inside a form, so the id 
 	//of the 'parent()' will always returns attributes of the form  
 	//to be submitted
-	alert($(name).parent().attr('id'));
+	//alert($(name).parent().attr('id'));
 	$($(name).submit().attr('id')).submit();
 	
 	//alert('finished');
@@ -65,7 +65,7 @@ function SubmitName(name){
 
 
 $('form#team-name-selection-form').submit(function(e){
-		alert('team name selected'); 
+		//alert('team name selected'); 
 		e.preventDefault();
 		//alert('team selection submit');
 		//akes an AJAX post request to the server side
@@ -81,7 +81,7 @@ $('form#team-name-selection-form').submit(function(e){
 
 //<form method="POST" id="player-name-selection-form" action="">
 $('form#player-name-selection-form').submit(function(e){
-		alert('team name selected'); 
+		//alert('team name selected'); 
 		e.preventDefault();
 		//alert('team selection submit');
 		//akes an AJAX post request to the server side

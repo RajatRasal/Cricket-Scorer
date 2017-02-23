@@ -36,7 +36,9 @@ class MatchDetailsForm(forms.ModelForm):
     
     class Meta:
 	    model = Match
-	    fields = ['ground_location', 'umpire_1', 'umpire_2', 'weather']
+	    fields = ['ground_location', 'umpire_1', 
+                    'umpire_2', 'weather', 'batting_first',
+                    'overs', 'home_team','away_team']
 
 class GeneralTextForm(forms.Form):
     """

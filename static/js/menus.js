@@ -2,9 +2,22 @@
 //OF THE INDEX.HTML FILE ALONG WITH THE AJAX.JS FILE.
 
 $(document).ready(function(){
-	//alert('page loaded');
+	alert('page loaded');
 	$(".next-button").hide();
+	alert('another one');
 	//$("input#hidden-input").hide();	
+	//A 'hacky' was of hiding all the elements 
+	//which will be used to send the home and away team names 
+	//back to the server side. I was unable to specify these
+	//attributes from the server side 'models.py'.
+	$("select#id_away_team").hide();	
+	$("label[for='id_away_team']").hide();	
+	$("select#id_home_team").hide();	
+	$("label[for='id_home_team']").hide();	
+	//Another 'hacky' was of setting a max and min value for 
+	//number of over in the match input field. I was unable to 
+	//specify these attributes from the server side 'models.py'.
+	$('#id_overs').attr('max', 100).attr('min', 1);
 });
 
 //Called by event handlers from various html elements. 

@@ -8,7 +8,6 @@ SQLite commands that have been created by the previous shell command.
 """
 
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator 
 
 class Team(models.Model):
 	"""
@@ -32,8 +31,7 @@ class Team(models.Model):
                 that record. 
                 """
                 return self.team_name
-
-
+	
 class Match(models.Model):
 	"""
 	Table in the database containing the details of each match 
@@ -42,7 +40,7 @@ class Match(models.Model):
 	where the ground is, number of overs being played, teams names,
 	umpire names etc.
 	"""
-	
+
 	#Team names will be a foreign key from the 'Team' table above, 
 	#to prevent data redundancy.
 	#models.PROTECT -> prevents the deletion of any referenced objects  
@@ -57,34 +55,35 @@ class Match(models.Model):
 	#been selected in the 'Team' table and makes these the only 
 	#possible options for selection.
 	ground_location = models.CharField(
-	max_length=50,
-	choices=(('home','home'),('away','away')),
-	default='home')
+                max_length=50,
+                choices=(('home','home'),('away','away')),
+                default='home')
 	umpire_1 = models.CharField(max_length=50)
 	umpire_2 = models.CharField(max_length=50)
-	weather = models.CharField(max_length=30,
-		choices = (
-		('0', ' '),
-		('1', 'sunny'),
-		('2', 'sunny spells'),
-		('3', 'windy'),
-		('4', 'showers'),
-		('5', 'heavy rain'),
-		('6', 'rain and sun'),
-		('7', 'cloudy'),
-		('8', 'overcast'),
-		('9', 'other'),),
-		default='0')
+	weather = models.CharField(
+			max_length=30,
+			choices = (
+			('0', ' '),
+			('1', 'sunny'),
+			('2', 'sunny spells'),
+			('3', 'windy'),
+			('4', 'showers'),
+			('5', 'heavy rain'),
+			('6', 'rain and sun'),
+			('7', 'cloudy'),
+			('8', 'overcast'),
+			('9', 'other'),),
+			default='0')
 	batting_first = models.CharField(
-		max_length=50,
-		choices=(('home','home'),('away','away')),
-		default='home')
-	overs = models.IntegerField(default=1)
-	result = models.CharField(max_length=50, default='x')
+                max_length=50,
+                choices=(('home','home'),('away','away')),
+                default='home')
+	#The 2 possible options will be the 2 team names 
+	#that have already been selected.
+	#batting_first = models.CharField()
 
 	def __str__(self):
-                return str(self.home_team)+' vs '+str(self.away_team)
-
+		return self.away_team 
 
 class Player(models.Model):
     """

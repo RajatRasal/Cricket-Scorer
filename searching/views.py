@@ -239,6 +239,7 @@ class PlayerStatistics(Statistics):
 class TeamStatistics(Statistics):
 
     def __init__(self):
+        #complete this properly once the scoring system is complete. 
         super().__init__()
         self.table = "searching_match_details"
         self.column_name = ""
