@@ -1,4 +1,4 @@
-{% extends './base.html' %}
+{% extends "./base.html" %}
 {% load staticfiles %}
 
 {% comment %} http://www.webhook.com/docs/template-inheritance-blocks/ {% endcomment %}
@@ -17,228 +17,21 @@
 
 	<!-- Selection Menu -->
 	<div class="w3-content w3-justify w3-text-grey w3-padding-64">
-		<button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#select-home-team">Start Scoring</button><br>
-		<button type="button" class="btn btn-default btn-lg btn-block">Players</button><br>
-		<button type="button" class="btn btn-default btn-lg btn-block">Teams</button>
+		<!--button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#match-details" onclick="alert('here');">Start Scoring</button><br-->
+		<button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#match-setup">Start Scoring</button><br>
+		<button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#player-details">Players</button><br>
+		<button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#team-details">Teams</button>
 	</div>
 </div>
 
-<!-- Modal Boxes -->
-<div class="modal fade" id="select-home-team" role="dialog">
-	<div class="modal-dialog modal-bg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body" style="height:450px">
-				<div class="w3-content w3-text-grey"> 
-					<h2 class="w3-text-grey" align="center">Select Home Team</h2>
-					<hr style="width:560px" class="w3-opacity">
-					<form method="POST" id="team-name-search-form" action="">
-						{% csrf_token %}
-						<div class="w3-section">
-							<div class="input-group">
-								{{ team_name_form.query }}
-								<span class="input-group-btn">
-								<button class='btn btn-search' type="submit">search</button>
-								</span>
-							</div>
-						</div><br>
-					</form>
-					<div class="col-md-12 column teams" style="position:relative; max-height:200px; overflow-y:scroll;"> 
-						<form method="POST" id="team-name-selection-form" action="">
-							{% csrf_token %}
-							<div id="team-name-selection-div">
-							<!-- query results will be seen here -->
-							</div>
-							<!-- The django form below will be kept hidden.
-	       						When the user selects a team name, it will be added to this 
-							form and then submitted when this form is submitted-->
-							{{ hidden_text_input_form.general_input }}
-							<button type="submit" class="home-team" id="team-name-selection-submit"></button>
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default next-button" data-dismiss="modal" data-toggle="modal" data-target="#player-selection" onclick="HideNext()">Next</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="player-selection" role="dialog">
-	<div class="modal-dialog modal-bg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<div class="w3-content w3-text-grey" style="height:400px"> 
-				<!-- Once the name is clicked, it should be displayed in a column next to it -->
-					<h2 class="w3-text-grey" align="center">Select home team players</h2>
-					<hr style="width:560px" class="w3-opacity">
-					<form method="POST" action="" target="_blank">
-						{% csrf_token %}
-						<div class="w3-section"> 
-						<div class="container-fluid" style="w3-section">
-							<div class="row">
-							<div class="col-sm-8">
-								<div class="panel panel-default">
-								<div class="panel-heading">All Players</div>
-								<div class="home-team" id="player-name-selection-form"
-								style="position:relative; overflow-y:scroll; height:280px">
-									<!--This is where all the player names will be placed-->
-								</div>
-							</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="panel panel-default">
-								<div class="panel-heading">Teamsheet</div>
-								<ul class="list-group home-team" style="position:relative; overflow-y:scroll; height:280px">
-									<!--This is where all the player names will be placed once they have been selected.-->
-								</ul>
-								</div>
-							</div>
-						</div>
-						</div>
-				</div>
-			</div>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-default next-button" data-dismiss="modal" data-toggle="modal" data-target="#select-away-team" onclick="HideNext()">Next</button>
-			</div>
-					</form>
-		</div>
-	</div>
-</div>
-
-<!-- away team -->
-<div class="modal fade" id="select-away-team" role="dialog">
-	<div class="modal-dialog modal-bg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body" style="height:450px">
-				<div class="w3-content w3-text-grey"> 
-					<h2 class="w3-text-grey" align="center">Select Away Team</h2>
-					<hr style="width:560px" class="w3-opacity">
-					<!-- maybe a class="away-team" is needed here -->
-					<form method="POST" id="team-name-search-form" action="">
-						{% csrf_token %}
-						<div class="w3-section">
-							<div class="input-group">
-								{{ team_name_form.query }}
-								<span class="input-group-btn">
-								<button class='btn btn-search' type="submit">search</button>
-								</span>
-							</div>
-						</div><br>
-					</form>
-					<!--add the hidden input form here -->
-					<div class="col-md-12 column teams" style="position:relative; max-height:200px; overflow-y:scroll;"> 
-						<form method="POST" id="team-name-selection-form" action="">
-							{% csrf_token %}
-							<div id="team-name-selection-div">
-							<!-- query results will be seen here -->
-							</div>
-							<!-- The django form below will be kept hidden.
-	       						When the user selects a team name, it will be added to this 
-							form and then submitted when this form is submitted-->
-							{{ hidden_text_input_form.general_input }}
-							<button type="submit" class="away-team" id="team-name-selection-submit"></button>
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default next-button" data-dismiss="modal" data-toggle="modal" data-target="#player-selection-2" onclick="HideNext()">Next</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="player-selection-2" role="dialog">
-	<div class="modal-dialog modal-bg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<div class="w3-content w3-text-grey" style="height:400px"> 
-				<!-- Once the name is clicked, it should be displayed in a column next to it -->
-					<h2 class="w3-text-grey" align="center">Select away team players</h2>
-					<hr style="width:560px" class="w3-opacity">
-					<form method="POST" action="" target="_blank">
-						{% csrf_token %}
-						<div class="w3-section"> 
-						<div class="container-fluid" style="position:relative">
-							<div class="row">
-							<div class="col-sm-8">
-								<div class="panel panel-default">
-								<div class="panel-heading">All Players</div>
-								<div class="away-team" id="player-name-selection-form" style="position:relative; overflow-y:scroll; height:280px">
-									<!--All away team player names will be placed here-->
-								</div>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="panel panel-default">
-								<div class="panel-heading">Teamsheet</div>
-								<ul class="list-group away-team" style="position:relative; overflow-y:scroll; height:280px">
-									<!--This is where all the selected away team player's name will be placed-->
-								</ul>
-								</div>
-							</div>
-						</div>
-						</div>
-					</form>
-				</div>
-			</div>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-default next-button" data-dismiss="modal" data-toggle="modal" data-target="#match-detail" onclick="HideNext()">Next</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!-- Match details -->
-<div class="modal fade" id="match-detail" role="dialog">
-	<div class="modal-dialog modal-bg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-			</div>
-			<div class="modal-body">
-				<div class="w3-content w3-text-grey"> 
-					<h2 class="w3-text-grey" align="center">Match Details</h2>
-					<hr style="width:560px" class="w3-opacity">
-					<form method="POST" action="" target="_blank">
-						{% csrf_token %}
-						<div class="w3-section">
-								{{ match_details_form.as_p }}
-							<div>
-								<div class="col-md-12 column tweets">
-									<!--Use this space for data input-->
-								</div>
-							</div>
-						</div><br>
-					</form>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#player-selection-2">Next</button>
-			</div>
-		</div>
-	</div>
-</div>
-
+	{% include "./modal_start_scoring_menu.html" %}
+	{% include "./modal_players_menu.html" %}
+	{% include "./modal_teams_menu.html" %}
 {% endblock %}
+
 
 {% block body_js %}
 	<script type="text/javascript" src="{% static 'js/ajax.js' %}"></script>
 	<script type="text/javascript" src="{% static 'js/menus.js' %}"></script>
 {% endblock %}
+

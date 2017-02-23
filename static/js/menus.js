@@ -2,9 +2,9 @@
 //OF THE INDEX.HTML FILE ALONG WITH THE AJAX.JS FILE.
 
 $(document).ready(function(){
-	alert('page loaded');
+	//alert('page loaded');
 	$(".next-button").hide();
-	$("input#team-name-selection-input").hide();
+	//$("input#hidden-input").hide();	
 });
 
 //Called by event handlers from various html elements. 
@@ -34,9 +34,12 @@ function EmptyTeamArrays() {
 
 $("button.close").click(function() {
 	EmptyTeamArrays();
-	alert(home_team);
+	//alert(home_team);
 	DisplayPlayerNames("home-team", []);
 	DisplayPlayerNames("away-team", []);
+	//remove all search results returned from server side
+	//in the html 
+	$('.search-results').html(' ');
 });
 
 var home_team = [];
@@ -97,10 +100,10 @@ function PlayerNameToggle(sender){
 			DisplayNext();
 		}
 	}
-	alert('HOME TEAM');
-	alert(home_team);
-	alert('AWAY TEAM');
-	alert(away_team);	
+	//alert('HOME TEAM');
+	//alert(home_team);
+	//alert('AWAY TEAM');
+	//alert(away_team);	
 };
 
 function CheckIfPlayerInTeam(player_name, team_name){
@@ -161,3 +164,16 @@ function DisplayPlayerNames(team_name, teamsheet){
 	teamsheet_html = '';	
 };
 
+
+//<form method="POST" action="/scoring/" id="match-details-submission-form">
+$("form#match-details-submission-form").submit(function(e){
+	alert('FINAL SUBMISSION');
+	$('<input />').attr('type','hidden'
+		).attr('name','home-team'
+		).attr('value',home_team
+		).appendTo(this);
+	$('<input />').attr('type','hidden'
+		).attr('name','away-team'
+		).attr('value',away_team
+		).appendTo(this);
+});

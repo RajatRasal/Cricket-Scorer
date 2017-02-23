@@ -37,12 +37,28 @@ $('form#team-name-search-form').submit(function(e){
 		e.preventDefault();
 });
 
-function SubmitTeamName(team_name){
+//same as above but only for player search instead of team search 
+$('form#player-name-search-form').submit(function(e){
+		alert('players searched');
+		$.post('/player_search/', $(this).serialize(), function(data){
+			$('div#player-name-selection-div').html(data);
+		}); 
+		e.preventDefault();
+});
+
+function SubmitName(name){
 	//alert('team selection');
 	//alert(team_name);
 
-	$("input.home-team#team-name-selection-input").val(team_name);
-	$("#team-name-selection-form").submit();
+	//$("input.home-team#hidden-input").val(team_name);
+	alert('VALUE OF CLICKED BUTTON')
+	alert($(name).attr('value'));
+	$("input#hidden-input").val($(name).attr('value'));
+	//These hidden input fields will always be inside a form, so the id 
+	//of the 'parent()' will always returns attributes of the form  
+	//to be submitted
+	alert($(name).parent().attr('id'));
+	$($(name).submit().attr('id')).submit();
 	
 	//alert('finished');
 };
@@ -61,3 +77,21 @@ $('form#team-name-selection-form').submit(function(e){
 			$('div#player-name-selection-form').html(data);
 		});
 });
+//POSSIBLY MERGE THE 2 SUBMIT FORM LISTENER'S TOGETHER
+
+//<form method="POST" id="player-name-selection-form" action="">
+$('form#player-name-selection-form').submit(function(e){
+		alert('team name selected'); 
+		e.preventDefault();
+		//alert('team selection submit');
+		//akes an AJAX post request to the server side
+		$.post('/player_stats/', $(this).serialize(), function(data){
+			//console.log( $('.teams #team-name-selection').html(data) );
+			//The data retrieved from the server side is now being 
+			//passed in between the html tags with the class
+			//'home-team' and the id 'player-name-selection-form'
+			$('div.stats#player-stats').html(data);
+		});
+});
+//POSSIBLY MERGE THE 2 SUBMIT FORM LISTENER'S TOGETHER
+

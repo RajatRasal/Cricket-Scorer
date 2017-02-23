@@ -1,0 +1,14 @@
+{% for name in names %}
+	<button type="button" 
+                class="well btn btn-secondary btn-lg btn-block" 
+                id="returned-team-name" 
+                value="{{ name }}"
+		onclick="SubmitName(this); DisplayNext();">{{ name }}
+        </button>
+{% endfor %}
+
+{% if not names %}
+	<div class="well">No Results Found</div>
+{% endif %}
+
+

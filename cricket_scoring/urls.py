@@ -15,7 +15,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from searching.views import Base, Index, TeamSearch, TeamSelection, AjaxTest	
+from searching.views import Base, Index, TeamSearch, TeamSelection, MatchDetails, PlayerSearch, PlayerStatistics, AjaxTest	
 
 admin.autodiscover()
 
@@ -25,5 +25,9 @@ urlpatterns = [
     url(r'^startpage/$', Index.as_view()),
     url(r'^team_search/$', TeamSearch.as_view()),
     url(r'^team_selection/$', TeamSelection.as_view()),
+    url(r'^match_details/$', MatchDetails.as_view()),
+    url(r'^player_search/$', PlayerSearch.as_view()),
+    url(r'^player_stats/$', PlayerStatistics.as_view()),
+    url(r'^scoring/$', MatchDetails.as_view()),
     url(r'^ajax_test/$', AjaxTest.as_view())
 ]
