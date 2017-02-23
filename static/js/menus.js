@@ -34,6 +34,7 @@ function DisplayNext() {
 function HideNext() {
 	$(".next-button").hide();
 	$('div#team-name-selection-div').html(' ');
+	$('div#player-name-selection-div').html(' ');
 };
 
 //This will empty any the team members selected from either team, 

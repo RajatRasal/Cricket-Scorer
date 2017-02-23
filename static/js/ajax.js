@@ -3,7 +3,7 @@
 
 //Test form 
 $('#search-form').submit(function(e){
-		alert('again');
+		//alert('again');
 		console.log( $(this).serialize() );
 		$.post('/ajax_test/', $(this).serialize(), function(data){
 			console.log( $('.teams').html(data) );
