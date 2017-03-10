@@ -76,13 +76,14 @@ function PlayerNameToggle(sender){
 	//end of their team list. 
 	if ( sender.parentNode.className === "home-team" ){
 		if ( CheckIfPlayerInTeam(player_name, home_team) ){
-			//alert('PLAYER IN HOME TEAM');
+			alert('PLAYER IN HOME TEAM');
 			var player_name_index = home_team.indexOf(player_name);
 			//alert(player_name_index);
-			home_team.splice(player_name_index, player_name_index+1);
+			//home_team.splice(player_name_index, player_name_index+1);
+			home_team.splice(player_name_index, 1);
 		}
 		else{
-			//alert('PLAYER NOT IN HOME TEAM');
+			alert('PLAYER NOT IN HOME TEAM');
 			home_team.push(player_name);
 		}
 
@@ -92,12 +93,17 @@ function PlayerNameToggle(sender){
 		if ( home_team.length === 6 ){
 			DisplayNext();
 		}
+
+		if ( home_team.length < 6 ){
+			HideNext();
+		}
 	}
 	//It is a little repetitive repeating the same sets of code
 	//for the home_team and away_team, however with JS being a 
 	//pass by value language, this avoid a lot of complications 
 	//associated with creating a function to automate this task.
 	else{
+		alert('away team');
 		if ( CheckIfPlayerInTeam(player_name, away_team) ){
 			//alert('PLAYER IN AWAY TEAM');
 			var player_name_index = away_team.indexOf(player_name);
@@ -112,6 +118,10 @@ function PlayerNameToggle(sender){
 
 		if ( away_team.length === 6 ){
 			DisplayNext();
+		}
+
+		if ( away_team.length < 6 ){
+			HideNext();
 		}
 	}
 	//alert('HOME TEAM');
@@ -131,6 +141,8 @@ function CheckIfPlayerInTeam(player_name, team_name){
 
 function DisplayPlayerNames(team_name, teamsheet){
 	//alert('DISPLAY PLAYER NAMES');
+	//alert(team_name);
+	//alert(teamsheet);
 	//Contains the class names given by Bootstrap for special 
 	//design features of list elements. These special features will
 	//be used to high the captain, vc, wiki and 12th and 13th men.
@@ -179,7 +191,6 @@ function DisplayPlayerNames(team_name, teamsheet){
 };
 
 
-//<form method="POST" action="/scoring/" id="match-details-submission-form">
 $("form#match-details-submission-form").submit(function(e){
 	alert('FINAL SUBMISSION');
 	$('<input />').attr('type','hidden'
@@ -191,3 +202,4 @@ $("form#match-details-submission-form").submit(function(e){
 		).attr('value',away_team
 		).appendTo(this);
 });
+

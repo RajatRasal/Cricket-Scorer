@@ -57,12 +57,29 @@ function SubmitName(name){
 	//These hidden input fields will always be inside a form, so the id 
 	//of the 'parent()' will always returns attributes of the form  
 	//to be submitted
-	//alert($(name).parent().attr('id'));
 	$($(name).submit().attr('id')).submit();
-	
+	//alert($(name).parent().attr('class'));
+	if ( $(name).parent().attr('class')=="search-results home-team" ){
+		SetTeamNames('id_home_team',$(name).attr('value'));
+	}
+	else {
+		SetTeamNames('id_away_team',$(name).attr('value'));
+	}
 	//alert('finished');
 };
 
+function SetTeamNames(id,team_name) {
+	//alert('SET TEAM NAMES');
+	//alert(team_name);
+	var options = document.getElementById('id_home_team').getElementsByTagName('option');
+	for (tag in options){
+		//alert(options[tag].innerHTML);
+		if (options[tag].innerHTML === team_name){
+			//alert(options[tag].value);
+			$('select#'.concat(id)).val(options[tag].value);
+		}
+	}
+};
 
 $('form#team-name-selection-form').submit(function(e){
 		//alert('team name selected'); 

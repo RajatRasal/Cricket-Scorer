@@ -1,4 +1,5 @@
 import json
+from re import sub, match
 		
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
@@ -233,7 +234,15 @@ class PlayerStatistics(Statistics):
         #returns a list of all the column names 
         self.column_names = self.cursor.execute("""
                 PRAGMA table_info('%s')""" % (self.table)).fetchall()
-        self.column_names = list(map(lambda z: str(z[1]), self.column_names))
+        #Add regex to remove the underscores in the column names and replace 
+        #with spaces. Example of Python FUNCTIONAL PROGRAMMING.
+        self.column_names = list(map(lambda z: sub('_',' ', str(z[1])), 
+            self.column_names))
+        print(self.column_names)
+        #Remove any column names with the term 'id' in them using Python 
+        #FUNCTIONAL PROGRAMMING syntax with the filter() funtion.
+        #self.column_names = list(filter(lambda z: bool(match('id',str(z[1])))==True, 
+        #    self.column_names))
         print(self.column_names)
 
 class TeamStatistics(Statistics):
