@@ -76,14 +76,14 @@ function PlayerNameToggle(sender){
 	//end of their team list. 
 	if ( sender.parentNode.className === "home-team" ){
 		if ( CheckIfPlayerInTeam(player_name, home_team) ){
-			alert('PLAYER IN HOME TEAM');
+			//alert('PLAYER IN HOME TEAM');
 			var player_name_index = home_team.indexOf(player_name);
 			//alert(player_name_index);
 			//home_team.splice(player_name_index, player_name_index+1);
 			home_team.splice(player_name_index, 1);
 		}
 		else{
-			alert('PLAYER NOT IN HOME TEAM');
+			//alert('PLAYER NOT IN HOME TEAM');
 			home_team.push(player_name);
 		}
 
@@ -103,7 +103,7 @@ function PlayerNameToggle(sender){
 	//pass by value language, this avoid a lot of complications 
 	//associated with creating a function to automate this task.
 	else{
-		alert('away team');
+		//alert('away team');
 		if ( CheckIfPlayerInTeam(player_name, away_team) ){
 			//alert('PLAYER IN AWAY TEAM');
 			var player_name_index = away_team.indexOf(player_name);
@@ -190,16 +190,41 @@ function DisplayPlayerNames(team_name, teamsheet){
 	teamsheet_html = '';	
 };
 
+// Below function will be called when the final form on the user data entry 
+// menus is being submitted. This will provide the user the opportunity to
+// stop the submission of the form incase incorrect data has been entered. 
+function AreYouSure() {
+	// Confirm box will contain an ok and cancel button. 
+	// ok = true, cancel = false   
+	var answer = confirm('Once you submit this, you can being scoring.\
+			\nAre you sure you want to continue?');
+	return answer;
+};
 
+// Below function will be called when the final form on the user data entry 
+// menus is being submitted. 
 $("form#match-details-submission-form").submit(function(e){
-	alert('FINAL SUBMISSION');
-	$('<input />').attr('type','hidden'
-		).attr('name','home-team'
-		).attr('value',home_team
-		).appendTo(this);
-	$('<input />').attr('type','hidden'
-		).attr('name','away-team'
-		).attr('value',away_team
-		).appendTo(this);
+	// AreYouSure function is being called from right above this function. 
+	if ( AreYouSure() === true ){
+		// The user wants to submit the form and start scoring. 
+		// The values for the home-team and away team names will be 
+		// put into the appropriate input fields to be submitted. 
+		$('<input />').attr('type','hidden'
+			).attr('name','home-team'
+			).attr('value',home_team
+			).appendTo(this);
+		$('<input />').attr('type','hidden'
+			).attr('name','away-team'
+			).attr('value',away_team
+			).appendTo(this);
+	}
+	else {
+		// The user DOES NOT WANT to submit the form and start scoring. 
+		// The form will not default to its submitting state and will 
+		// then display a message telling the user it has not been 
+		// submitted.  
+		e.preventDefault();
+		alert("Form has not been submitted just yet");
+	}
 });
 
