@@ -20,6 +20,11 @@ $(document).ready(function(){
 	$('#id_overs').attr('max', 100).attr('min', 1);
 });
 
+//Are you sure you want to return to home page? confirm box for the 
+//home button on the side bar. This will also be used for the exit button
+//on the scoresheet. 
+//function 
+
 //Called by event handlers from various html elements. 
 //Will make the next button visible when called. 
 //Will be called when the user has provided sufficient information
@@ -193,11 +198,10 @@ function DisplayPlayerNames(team_name, teamsheet){
 // Below function will be called when the final form on the user data entry 
 // menus is being submitted. This will provide the user the opportunity to
 // stop the submission of the form incase incorrect data has been entered. 
-function AreYouSure() {
+function AreYouSure(message) {
 	// Confirm box will contain an ok and cancel button. 
 	// ok = true, cancel = false   
-	var answer = confirm('Once you submit this, you can being scoring.\
-			\nAre you sure you want to continue?');
+	var answer = confirm(message.concat(" Are you sure you want to continue?"));
 	return answer;
 };
 
@@ -205,7 +209,8 @@ function AreYouSure() {
 // menus is being submitted. 
 $("form#match-details-submission-form").submit(function(e){
 	// AreYouSure function is being called from right above this function. 
-	if ( AreYouSure() === true ){
+	// if ( AreYouSure("Once you submit you can start scoring.") === true ){
+	if ( AreYouSure("Once you submit you can start scoring.") === true ){
 		// The user wants to submit the form and start scoring. 
 		// The values for the home-team and away team names will be 
 		// put into the appropriate input fields to be submitted. 

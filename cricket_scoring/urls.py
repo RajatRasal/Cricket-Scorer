@@ -15,7 +15,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from searching.views import Base, Index, TeamSearch, TeamSelection, MatchDetails, PlayerSearch, PlayerStatistics, AjaxTest
+from searching.views import (Base, Index, TeamSearch,
+                             TeamSelection, MatchDetails, PlayerSearch,
+                             PlayerStatistics, AjaxTest)
+from scoring.views import ScoringInterface
 
 admin.autodiscover()
 
@@ -29,5 +32,6 @@ urlpatterns = [
     url(r'^player_search/$', PlayerSearch.as_view()),
     url(r'^player_stats/$', PlayerStatistics.as_view()),
     url(r'^scoring/$', MatchDetails.as_view()),
+    url(r'^scoring_submit/$', ScoringInterface.as_view()),
     url(r'^ajax_test/$', AjaxTest.as_view())
 ]

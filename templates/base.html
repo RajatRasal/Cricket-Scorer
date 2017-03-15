@@ -23,10 +23,9 @@
 <nav class="w3-sidenav w3-center w3-small w3-hide-small w3-text-light-grey">
 <!-- Avatar image in top left corner -->
 	<img src="http://img.cricinfo.com/espncricinfo/cricket_monthly/Shot_Stories_image.jpg" style="width:100%">
-	<a class="w3-padding-small w3-black">
-	</a>
-	<a class="w3-padding-large w3-black" href="#"><!-- href= may be useful for navigation back to the home page-->
-		<i class="glyphicon glyphicon-home w3-xxlarge"></i>
+	<a class="w3-padding-large w3-hover-black" href="/startpage/" 
+		onclick="return AreYouSure('You will not be redirected to the homepage, all scoring data will be lost.')">
+		<i class="glyphicon glyphicon-home w3-xxlarge w3-hover-black"></i>
 		<p id="sidebar-button">HOME</p>
 	</a>
 	<a class="w3-padding-large w3-hover-black">
@@ -126,7 +125,8 @@
 
 
 <!-- Navbar on small screens (Hidden on medium and large screens) -->
-<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar" style="position:relative">
+<!--div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar"-->
 	<ul class="w3-navbar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
 		<li class="w3-left" style="width:25% !important"><a id="header-button">HOME</a>
 		</li>

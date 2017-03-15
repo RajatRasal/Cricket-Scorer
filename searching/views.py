@@ -13,9 +13,16 @@ from searching.forms import (TeamnameSearchForm,
                              GeneralTextForm,
                              AjaxTestForm,
                              )
+from scoring.views import ScoringInterface
 
 
 class Base(View):
+    """
+    The View is being inherited from the methods and classes provided by Django
+    and will allow the get and post methods in this class to be called up when
+    a get or post is made on the page when this class is being used to produce
+    HTML.
+    """
 
     def get(self, request):
         return render(request, 'base.html')
@@ -268,17 +275,23 @@ class TeamStatistics(Statistics):
         self.column_name = ""
 
 
-class MatchDetails(View):
+class MatchDetails(ScoringInterface):
+    """
+    View does not need to be inherited here since it is being inherited through
+    the ScoringInterface class. The ScoringInterface class inherits View, so
+    it does not need to be menitoned here again.
+    """
 
     def __init__(self):
+        super().__init__()
         self.cursor = connection.cursor()
     # possibly use inheritance here to get the GET function from the
     # file in the scoring folder?????
     # send any posting requests to that file
 
-    def get(self, request):
-        print('MATCH DETAILS GET')
-        return render(request, 'base.html')
+    # def get(self, request):
+        # print('MATCH DETAILS GET')
+        # return render(request, 'base.html')
 
     def post(self, request):
         print('MATCH DETAILS POST')
@@ -313,15 +326,15 @@ class MatchDetails(View):
                             away_team_id, home_team_id, batting_first, overs)
                             VALUES (DATE('now'), '%s', '%s', '%s', '%s',
                             %s, %s, '%s', %s)""" % (match_details['ground_location'],
-                                                  match_details['umpire_1'][0],
-                                                  match_details['umpire_2'][0],
-                                                  match_details['weather'][0],
-                                                  int(match_details['away_team'][0]),
-                                                  int(match_details['home_team'][0]),
-                                                  match_details['batting_first'][0],
-                                                  int(match_details['overs'][0])))
-        return render(request, 'scoring.html')
-
+                                                    match_details['umpire_1'][0],
+                                                    match_details['umpire_2'][0],
+                                                    match_details['weather'][0],
+                                                    int(match_details['away_team'][0]),
+                                                    int(match_details['home_team'][0]),
+                                                    match_details['batting_first'][0],
+                                                    int(match_details['overs'][0])))
+        return HttpResponseRedirect("/scoring/")
+        #return render(request, 'scoring.html')
 
 class AjaxTest(View):
 
