@@ -37,6 +37,9 @@ function HideNext() {
 	$('div#player-name-selection-div').html(' ');
 };
 
+var home_team = [];
+var away_team = [];
+
 //This will empty any the team members selected from either team, 
 //so that if someone wants to reselect team members, or start a 
 //new game after finishing an old one, they can do so when new 
@@ -55,9 +58,6 @@ $("button.close").click(function() {
 	//in the html 
 	$('.search-results').html(' ');
 });
-
-var home_team = [];
-var away_team = [];
 
 //Functions is called when a user clicks on a player's name when
 //making a team selection. This will check if the player has already
@@ -217,6 +217,14 @@ $("form#match-details-submission-form").submit(function(e){
 			).attr('name','away-team'
 			).attr('value',away_team
 			).appendTo(this);
+//		$('<input />').attr('type','hidden'
+//			).attr('name','home-team-name'
+//			).attr('value',home_team_name
+//			).appendTo(this);
+//		$('<input />').attr('type','hidden'
+//			).attr('name','away-team-name'
+//			).attr('value',away_team_name
+//			).appendTo(this);
 	}
 	else {
 		// The user DOES NOT WANT to submit the form and start scoring. 

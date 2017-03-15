@@ -54,23 +54,32 @@ function SubmitName(name){
 	//alert('VALUE OF CLICKED BUTTON')
 	//alert($(name).attr('value'));
 	$("input#hidden-input").val($(name).attr('value'));
-	//These hidden input fields will always be inside a form, so the id 
-	//of the 'parent()' will always returns attributes of the form  
-	//to be submitted
 	$($(name).submit().attr('id')).submit();
 	//alert($(name).parent().attr('class'));
+	//There a hidden input fields which are being submitted by the Ajax 
+	//rquest to the client side. The below conditionals will set the input 
+	//fields in the hidden inputs to store the home and away team names, so
+	//on submission these input fields will send the team names to the server. 
 	if ( $(name).parent().attr('class')=="search-results home-team" ){
 		SetTeamNames('id_home_team',$(name).attr('value'));
+		//Setting a client side variable to hold the home team name so 
+		//that is can be submitted separately once the match details 
+		//modal box is submitted. 
+		home_team_name = $(name).attr('value');
 	}
 	else {
 		SetTeamNames('id_away_team',$(name).attr('value'));
+		//Setting a client side variable to hold the away team name so 
+		//that is can be submitted separately once the match details 
+		//modal box is submitted. 
+		away_team_name = $(name).attr('value');
 	}
 	//alert('finished');
 };
 
 function SetTeamNames(id,team_name) {
-	//alert('SET TEAM NAMES');
-	//alert(team_name);
+	alert('SET TEAM NAMES');
+	alert(id.concat(team_name));
 	var options = document.getElementById('id_home_team').getElementsByTagName('option');
 	for (tag in options){
 		//alert(options[tag].innerHTML);

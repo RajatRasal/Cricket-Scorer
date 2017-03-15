@@ -1,7 +1,7 @@
 import json
 from re import sub
 
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse
 from django.views.generic import View
 from django.template import Context
 from django.template.loader import render_to_string
@@ -91,8 +91,8 @@ class TeamSearch(View):
             # form is vulnerable to injection here !!!!!
             # CREATE 2 TESTS
             print("""QUERY: SELECT %s FROM %s WHERE %s LIKE '%s%s%s';""" %
-                (self.column_name, self.table_name,
-                 self.column_name, '%', query, '%'))
+                  (self.column_name, self.table_name,
+                   self.column_name, '%', query, '%'))
             # unsafe query
             self.cursor.execute(
                 """SELECT %s FROM %s
@@ -255,7 +255,7 @@ class PlayerStatistics(Statistics):
         # Remove any column names which have the term 'id' in them.
         # Example of Python FUNCTIONAL PROGRAMMING.
         self.column_names = list(filter(lambda z: 'id' not in z,
-                                     self.column_names))
+                                        self.column_names))
         print(self.column_names)
 
 
@@ -270,19 +270,57 @@ class TeamStatistics(Statistics):
 
 class MatchDetails(View):
 
+    def __init__(self):
+        self.cursor = connection.cursor()
     # possibly use inheritance here to get the GET function from the
     # file in the scoring folder?????
     # send any posting requests to that file
+
     def get(self, request):
-        print('NOW IN GET')
+        print('MATCH DETAILS GET')
         return render(request, 'base.html')
 
     def post(self, request):
-        print('match details')
-        print(request.POST)
+        print('MATCH DETAILS POST')
 
-        # Once the post results have been processed,
-        return HttpResponseRedirect('')
+        print(type(request.POST))
+        match_details = dict(request.POST)
+        print('MATCH DETAILS DICTIONARY SUBMISSION: {}'.format(match_details))
+        # team_id_get = "SELECT * FROM searching_team WHERE team_name = %s
+        # home_team_id = Team.objects
+        if match_details['ground_location'] == 'home':
+            self.cursor.execute("""SELECT home_ground FROM searching_team
+                                WHERE id=%s;""" %
+                                (int(match_details['home_team'][0])))
+        else:
+            self.cursor.execute("""SELECT home_ground FROM searching_team
+                                WHERE id=%s;""" %
+                                (int(match_details['away_team'][0])))
+        match_details['ground_location'] = self.cursor.fetchone()[0]
+        print('MATCH DETAILS DICTIONARY ALTERNATION: {}'.format(match_details))
+
+        print(match_details['ground_location'],
+              match_details['umpire_1'][0],
+              match_details['umpire_2'][0],
+              match_details['weather'][0],
+              match_details['away_team'],
+              match_details['home_team'],
+              match_details['batting_first'][0],
+              match_details['overs'])
+
+        self.cursor.execute("""INSERT INTO searching_match
+                            (date, ground_location, umpire_1, umpire_2, weather,
+                            away_team_id, home_team_id, batting_first, overs)
+                            VALUES (DATE('now'), '%s', '%s', '%s', '%s',
+                            %s, %s, '%s', %s)""" % (match_details['ground_location'],
+                                                  match_details['umpire_1'][0],
+                                                  match_details['umpire_2'][0],
+                                                  match_details['weather'][0],
+                                                  int(match_details['away_team'][0]),
+                                                  int(match_details['home_team'][0]),
+                                                  match_details['batting_first'][0],
+                                                  int(match_details['overs'][0])))
+        return render(request, 'scoring.html')
 
 
 class AjaxTest(View):

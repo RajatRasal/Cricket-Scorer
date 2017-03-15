@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+{% load staticfiles %}
+
+{% comment %} http://www.webhook.com/docs/template-inheritance-blocks/ {% endcomment %}
+
+{% block head_js %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Content -->
+<div>
+	<!-- Header/Home -->
+	<header class="w3-container w3-padding-32 w3-center w3-black" id="home">
+	<h1 class="w3-jumbo"><span class="w3-hide-small">Cricket Scorer</span></h1>
+	<p>A Simple Cricket Scoring Web App</p>
+	<h3>Scoring Interface</h3>
+	</header>
+{% endblock %}
+
+
+{% block body_js %}
+	<script type="text/javascript" src="{% static 'js/ajax_for_menus.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/menus.js' %}"></script>
+{% endblock %}
+

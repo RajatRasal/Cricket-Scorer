@@ -118,8 +118,8 @@ STATICFILES_DIRS = (
 
 if __name__ == "__main__":
 	"""
-	Testing that all the correct directories have been referred to within this file 
-	so that when the Django server is started up, it will be able to refer to the 
+	Testing that all the correct directories have been referred to within this file
+	so that when the Django server is started up, it will be able to refer to the
 	correct server side static files (JS, jQuery and HTML) as well as correct database
 	files.
 	"""
