@@ -4,7 +4,6 @@
 $(document).ready(function(){
 	alert('page loaded');
 	$(".next-button").hide();
-	alert('another one');
 	//$("input#hidden-input").hide();	
 	//A 'hacky' was of hiding all the elements 
 	//which will be used to send the home and away team names 
@@ -208,6 +207,7 @@ function AreYouSure(message) {
 // Below function will be called when the final form on the user data entry 
 // menus is being submitted. 
 $("form#match-details-submission-form").submit(function(e){
+	alert('submit')
 	// AreYouSure function is being called from right above this function. 
 	// if ( AreYouSure("Once you submit you can start scoring.") === true ){
 	if ( AreYouSure("Once you submit you can start scoring.") === true ){
@@ -215,13 +215,14 @@ $("form#match-details-submission-form").submit(function(e){
 		// The values for the home-team and away team names will be 
 		// put into the appropriate input fields to be submitted. 
 		$('<input />').attr('type','hidden'
-			).attr('name','home-team'
+			).attr('name','home_team_teamsheet'
 			).attr('value',home_team
 			).appendTo(this);
 		$('<input />').attr('type','hidden'
-			).attr('name','away-team'
+			).attr('name','away_team_teamsheet'
 			).attr('value',away_team
 			).appendTo(this);
+		alert(this);
 //		$('<input />').attr('type','hidden'
 //			).attr('name','home-team-name'
 //			).attr('value',home_team_name

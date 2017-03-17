@@ -8,8 +8,10 @@ then run 'python3 manage.py migrate' in order to run the SQLite commands that
 have been created by the previous shell command.
 """
 
+from datetime import datetime
+
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+# from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Team(models.Model):
@@ -129,4 +131,20 @@ class Player(models.Model):
 
     def __str__(self):
         return self.player_name
+
+
+class MatchTeamPlayer(models.Model):
+    """
+    Table will be used to link the Match, Team and Player entities. This will
+    allow for there to be a one-to-many relationship between each of these
+    entities. Should also make it easier to query data when producing stats
+    """
+
+    player_id = models.ForeignKey(Player, on_delete=models.PROTECT)
+    team_id = models.ForeignKey(Team, on_delete=models.PROTECT)
+    match_id = models.ForeignKey(Match, on_delete=models.PROTECT)
+    date = models.DateField(default=datetime.now, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.match_id)
 

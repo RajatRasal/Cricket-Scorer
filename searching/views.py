@@ -1,7 +1,7 @@
 import json
 from re import sub
 
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.template import Context
 from django.template.loader import render_to_string
@@ -321,20 +321,65 @@ class MatchDetails(ScoringInterface):
               match_details['batting_first'][0],
               match_details['overs'])
 
+        #All the non integer data types need to be converted specific
+        print("""INSERT INTO searching_match
+                            (date, ground_location, umpire_1, umpire_2, weather,
+                            away_team_id, home_team_id, batting_first, overs)
+                            VALUES (DATE('now'), %s, %s, %s, %s, %s, %s,
+                            %s, %s)""" % (str(match_details['ground_location']),
+                                            str(match_details['umpire_1'][0]),
+                                            str(match_details['umpire_2'][0]),
+                                            int(match_details['weather'][0]),
+                                            int(match_details['away_team'][0]),
+                                            int(match_details['home_team'][0]),
+                                            str(match_details['batting_first'][0]),
+                                            int(match_details['overs'][0])))
+
         self.cursor.execute("""INSERT INTO searching_match
                             (date, ground_location, umpire_1, umpire_2, weather,
                             away_team_id, home_team_id, batting_first, overs)
-                            VALUES (DATE('now'), '%s', '%s', '%s', '%s',
-                            %s, %s, '%s', %s)""" % (match_details['ground_location'],
-                                                    match_details['umpire_1'][0],
-                                                    match_details['umpire_2'][0],
-                                                    match_details['weather'][0],
-                                                    int(match_details['away_team'][0]),
-                                                    int(match_details['home_team'][0]),
-                                                    match_details['batting_first'][0],
-                                                    int(match_details['overs'][0])))
+                            VALUES (DATE('now'), %s, %s, %s, %s, %s, %s,
+                            %s, %s)""", [match_details['ground_location'],
+                                            match_details['umpire_1'][0],
+                                            match_details['umpire_2'][0],
+                                            match_details['weather'][0],
+                                            int(match_details['away_team'][0]),
+                                            int(match_details['home_team'][0]),
+                                            match_details['batting_first'][0],
+                                            int(match_details['overs'][0])])
+        # Add all the players name to match team player with match id and
+        # team id
+        all_players = match_details["home_team_teamsheet"][0].split(',') + match_details["away_team_teamsheet"][0].split(',')
+
+        for player in all_players:
+            print(player)
+            self.cursor.execute("""SELECT id,current_team_name_id FROM
+                                searching_player WHERE player_name =%s""",
+                                [player])
+            # y = self.cursor.fetchone()
+            # print(type(y))
+            # print(y)
+            player_id, team_id = self.cursor.fetchone()
+            print(team_id)
+            self.cursor.execute("""SELECT id FROM searching_match
+                           ORDER BY id DESC LIMIT 1""")
+            match_id = self.cursor.fetchone()[0]
+            print(match_id)
+            print('Player id = {}, Team id = {}, Match id = {}'.format(
+                player_id, team_id, match_id))
+            self.cursor.execute("""INSERT INTO searching_MatchTeamPlayer
+                                (player_id_id, team_id_id, match_id_id)
+                                VALUES (%s, %s, %s)""",
+                                [int(player_id), int(team_id), int(match_id)])
+#            mtp = MatchTeamPlayer(player_id=int(player_id),
+#                                  team_id=int(team_id),
+#                                  match_id=int(match_id))
+#            mtp.save()
+            # issue - the playerslists are being reutned as one long string
+
         return HttpResponseRedirect("/scoring/")
-        #return render(request, 'scoring.html')
+        # return render(request, 'scoring.html')
+
 
 class AjaxTest(View):
 
