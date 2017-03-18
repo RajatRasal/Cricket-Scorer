@@ -13,7 +13,7 @@
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
-      				<a class="navbar-brand" href="#">Scoresheet</a>
+      				<a class="navbar-brand">Scoresheet</a>
           		</div>
   			<ul class="nav navbar-nav">
   				<li class="active"><a data-toggle="tab" href="#Batters">Batters</a></li>
@@ -37,35 +37,32 @@
         		</ul>
     		</div>
 	</nav>
-  
+	<div style="border:red">
 	<div class="tab-content">
 		<div id="Batters" class="tab-pane fade in active">
-			<div class="container">
-				<h3>Batters</h3>
-				<p>BATTERS DATA WILL GO HERE</p>
+			<div class="container-fluid">
+				{% include "./scoring_batting_table.html" %}
 			</div>
 		</div>
 	
 		<div id="Bowlers" class="tab-pane fade">
-			<div class="container">
-				<h3>Bowlers</h3>
-				<p>BOWLERS DATA WILL GO HERE</p>
+			<div class="container-fluid">
+				{% include "./scoring_bowling_table.html" %}
 			</div>
 		</div>
 	
 		<div id="Ball-By-Ball" class="tab-pane fade">
-			<div class="container">
-				<h3>Ball-By-Ball</h3>
-				<p>BALL-BY-BALL DATA WILL GO HERE</p>
+			<!--div class="container-fluid" style="height:280px; overflow-y:scroll"-->
+			<div class="container-fluid">
+				{% include "./scoring_ball_by_ball_display.html" %}
 			</div>
 		</div>
 	</div>
+	</div> 
 
 {% endblock %}
 
 
 {% block body_js %}
-	<script type="text/javascript" src="{% static 'js/ajax_for_menus.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/menus.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/scoring.js' %}"></script>
 {% endblock %}
-

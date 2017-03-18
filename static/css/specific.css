@@ -39,5 +39,47 @@ button {
 	border-radius: 5px;
 }
 
+/* Below table related blocks are to make the 
+ * Ball-By-Ball table scrollable */
+.table-fixed {
+	position:relative; 
+	/*fixes the position of the table 
+	 inside an outer div*/ 
+}
+
+/* Allows for the whole table to scroll if its
+ height is greater than 250 pixels. */
+.table-scroll {
+	height: 250px;
+	overflow: auto;
+	margin-top: 20px;
+}
+/
+/* The table will take up the whole of the width 
+ of the div it is placed inside. */
+.table-fixed table {
+	width: 100%
+}
+
+/* The background color of every cell in the table
+ will be set to black such that none of the table 
+ rows or cells are transparent. */
+.table-fixed table * {
+	background: black;
+}
+
+.table-fixed table thead th #heading {
+	/* Fixes the position of the table heading row. */
+	position: absolute; 
+	/* HTML elements with a higher z-index are placed
+	on top of those with a lower z-index. */
+	z-index: 2;
+	/* The below 2 attributes fix the height and position 
+	of the table heading such that any rows being scrolled
+	will pass underneath them. */
+	top: -20px;
+	height: 20px;
+}
+
 /* Remove margins from "page content" on small screens */
 @media only screen and (max-width: 600px) {#main {margin-left: 0}}
