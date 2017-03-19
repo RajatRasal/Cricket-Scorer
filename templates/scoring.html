@@ -37,7 +37,6 @@
         		</ul>
     		</div>
 	</nav>
-	<div style="border:red">
 	<div class="tab-content">
 		<div id="Batters" class="tab-pane fade in active">
 			<div class="container-fluid">
@@ -52,14 +51,17 @@
 		</div>
 	
 		<div id="Ball-By-Ball" class="tab-pane fade">
-			<!--div class="container-fluid" style="height:280px; overflow-y:scroll"-->
 			<div class="container-fluid">
 				{% include "./scoring_ball_by_ball_display.html" %}
 			</div>
 		</div>
 	</div>
-	</div> 
-
+	{% comment %}{% include "./scoring_buttons.html" %}{% endcomment %}
+			<br><br><br>
+	<div class="container-fluid" style="color:white!important">
+		{% include "./scoring_buttons_layout.html" %} 
+	</div>
+</div>
 {% endblock %}
 
 

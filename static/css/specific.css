@@ -39,6 +39,13 @@ button {
 	border-radius: 5px;
 }
 
+/* SCORING PAGE STYLE DETAILS */
+
+#Batters, #Bowlers, #Ball-By-Ball {
+	height: 110px;
+}
+
+
 /* Below table related blocks are to make the 
  * Ball-By-Ball table scrollable */
 .table-fixed {
@@ -50,7 +57,7 @@ button {
 /* Allows for the whole table to scroll if its
  height is greater than 250 pixels. */
 .table-scroll {
-	height: 250px;
+	height: 130px;
 	overflow: auto;
 	margin-top: 20px;
 }
@@ -79,6 +86,26 @@ button {
 	will pass underneath them. */
 	top: -20px;
 	height: 20px;
+}
+
+/* To make scoring buttons circular and correctly grouped 
+ * together */ 
+.btn-circle {
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	padding: 6px 0;
+	font-size: 15px;
+	line-height: 1.428571429;
+	border-radius: 19px;
+}
+
+.btn-title {
+	width: 60px !important; 
+}
+
+.btn-events {
+	width: 92px;
 }
 
 /* Remove margins from "page content" on small screens */

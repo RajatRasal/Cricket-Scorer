@@ -1,0 +1,17 @@
+{
+  "name": "twitter_post",
+  "version": "1.0.0",
+  "description": "Post live cricket scores to a Twitter page periodically ",
+  "main": "post.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cricket"
+  ],
+  "author": "Rajat Rasal",
+  "license": "ISC",
+  "dependencies": {
+    "twit": "^2.2.5"
+  }
+}
