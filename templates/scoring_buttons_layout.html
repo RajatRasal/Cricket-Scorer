@@ -1,0 +1,22 @@
+<div class="row">
+	<div class="" align="center">
+		<h4>Current Match Stats</h4>
+		{% include "./scoring_current_game_stats.html" %}	
+	</div>
+</div><br>
+<div class="row">
+	<div class="col-xs-12" align="center">
+		<div class="">
+			Last 10 deliveries &#8209; 
+			{% include "./scoring_last_10_balls.html" %}
+		</div>
+	</div>
+</div><br>
+<div class="row">
+	<div class="" align="center">
+		{% include "./scoring_buttons.html" %}
+	</div>
+</div><br>
+<div class="row" align="right">
+	{% include "./scoring_buttons_events.html" %}
+</div>

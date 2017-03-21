@@ -1,0 +1,12 @@
+/* The below CSS is for the design of the last
+ * 10 balls in the over section on the page. */
+span.over {
+	border-right: thick double #ffffff;
+	/* The over divider has a top and bottom padding of 
+ 	* 10px and a sides padding of 0px.*/
+	padding: 10px 0px; 
+}
+span.ball {
+	padding: 0px 10px; 
+	border-left: thin double #ffffff;
+}

@@ -55,6 +55,7 @@ function EmptyTeamArrays() {
 
 $("button.close").click(function() {
 	EmptyTeamArrays();
+	alert('button close being called');
 	//alert(home_team);
 	DisplayPlayerNames("home-team", []);
 	DisplayPlayerNames("away-team", []);
