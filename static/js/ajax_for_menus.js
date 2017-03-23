@@ -46,16 +46,10 @@ $('form#player-name-search-form').submit(function(e){
 		e.preventDefault();
 });
 
-function SubmitName(name){
-	//alert('team selection');
-	//alert(team_name);
-
-	//$("input.home-team#hidden-input").val(team_name);
-	//alert('VALUE OF CLICKED BUTTON')
-	//alert($(name).attr('value'));
+function SelectNameDiv(name){
+	console.log('name clicked: '.concat($(name).attr('value')));
 	$("input#hidden-input").val($(name).attr('value'));
 	$($(name).submit().attr('id')).submit();
-	//alert($(name).parent().attr('class'));
 	//There a hidden input fields which are being submitted by the Ajax 
 	//rquest to the client side. The below conditionals will set the input 
 	//fields in the hidden inputs to store the home and away team names, so
@@ -63,14 +57,14 @@ function SubmitName(name){
 	if ( $(name).parent().attr('class')=="search-results home-team" ){
 		SetTeamNames('id_home_team',$(name).attr('value'));
 		//Setting a client side variable to hold the home team name so 
-		//that is can be submitted separately once the match details 
+		//that it can be submitted separately once the match details 
 		//modal box is submitted. 
 		home_team_name = $(name).attr('value');
 	}
 	else {
 		SetTeamNames('id_away_team',$(name).attr('value'));
 		//Setting a client side variable to hold the away team name so 
-		//that is can be submitted separately once the match details 
+		//that it can be submitted separately once the match details 
 		//modal box is submitted. 
 		away_team_name = $(name).attr('value');
 	}

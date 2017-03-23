@@ -14,6 +14,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.decorators.csrf import csrf_exempt
 
 from searching.views import (Base, Index, TeamSearch,
                              TeamSelection, MatchDetails, PlayerSearch,
@@ -33,5 +34,6 @@ urlpatterns = [
     url(r'^player_stats/$', PlayerStatistics.as_view()),
     url(r'^scoring/$', MatchDetails.as_view()),
     url(r'^scoring_submit/$', ScoringInterface.as_view()),
+    url(r'^get_scores/$', csrf_exempt(ScoringInterface.as_view())),
     url(r'^ajax_test/$', AjaxTest.as_view())
 ]

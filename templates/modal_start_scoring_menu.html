@@ -38,7 +38,11 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default next-button" data-backdrop="static" data-keyboard="false" data-dismiss="modal" data-toggle="modal" data-target="#player-selection" onclick="HideNext()">Next</button>
+				<button type="button" class="btn btn-default next-button" data-backdrop="static" 
+					data-keyboard="false" data-dismiss="modal" data-toggle="modal" 
+					data-target="#player-selection" onclick="HideNext()">
+					Next
+				</button>
 			</div>
 		</div>
 	</div>
@@ -82,13 +86,16 @@
 						</div>
 				</div>
 			</div>
-			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-default next-button" data-backdrop="static" data-keyboard="false" data-dismiss="modal" data-toggle="modal" data-target="#select-away-team" onclick="HideNext()">Next</button>
+				<button type="submit" class="btn btn-default next-button" 
+					data-backdrop="static" data-keyboard="false" 
+					data-dismiss="modal" data-toggle="modal" 
+					data-target="#select-away-team" onclick="HideNext()">Next
+				</button>
 			</div>
 					</form>
-		</div>
 	</div>
+</div>
 </div>
 
 <!-- away team -->
@@ -195,7 +202,7 @@
 					<h2 class="w3-text-grey" align="center">Match Details</h2>
 					<hr class="w3-opacity">
 						{% csrf_token %}
-						<div class="w3-section">
+						<div class="w3-section" id="match-details-from-server">
 								{{ match_details_form.as_p }}
 							<div>
 								<div class="col-md-12 column tweets">

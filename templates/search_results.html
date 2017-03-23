@@ -1,9 +1,9 @@
 {% for name in names %}
 	<button type="button" 
                 class="well btn btn-secondary btn-lg btn-block" 
-                id="returned-team-name" 
+                id="returned-search-result-names" 
                 value="{{ name }}"
-		onclick="SubmitName(this); DisplayNext();">{{ name }}
+		onclick="SelectNameDiv(this); DisplayNext();">{{ name }}
         </button>
 {% endfor %}
 

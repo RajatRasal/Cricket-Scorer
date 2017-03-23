@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	alert('Scoring page');
-	//$("[data-toggle='tooltip']").tooltip();
+	scoring(current_data);
 });
 
 $("a.twitter-post").click(function() {
@@ -21,4 +21,21 @@ $("a.twitter-post").click(function() {
 	});
 });
 
+var current_data = {};
 
+function scoring(x) {
+	try {
+		alert(x);
+
+		post(x);
+	}
+	catch(err) {
+	}
+}
+
+function post(query) {
+		$.post('/get_scores/', query, function(data){
+			console.log(data);
+			current_data = data;
+		}); 
+}

@@ -3,9 +3,10 @@
 
 $(document).ready(function(){
 	alert('page loaded');
+	alert('page loaded');
 	$(".next-button").hide();
-	//$("input#hidden-input").hide();	
-	//A 'hacky' was of hiding all the elements 
+	$("input#hidden-input").hide();	
+	//A 'hacky' way of hiding all the elements 
 	//which will be used to send the home and away team names 
 	//back to the server side. I was unable to specify these
 	//attributes from the server side 'models.py'.
@@ -13,16 +14,13 @@ $(document).ready(function(){
 	$("label[for='id_away_team']").hide();	
 	$("select#id_home_team").hide();	
 	$("label[for='id_home_team']").hide();	
-	//Another 'hacky' was of setting a max and min value for 
+	//Another 'hacky' way of setting a max and min value for 
 	//number of over in the match input field. I was unable to 
 	//specify these attributes from the server side 'models.py'.
 	$('#id_overs').attr('max', 100).attr('min', 1);
+	$('#id_umpire_1').attr('required', true)
+	$('#id_umpire_2').attr('required', true)
 });
-
-//Are you sure you want to return to home page? confirm box for the 
-//home button on the side bar. This will also be used for the exit button
-//on the scoresheet. 
-//function 
 
 //Called by event handlers from various html elements. 
 //Will make the next button visible when called. 
@@ -54,25 +52,98 @@ function EmptyTeamArrays() {
 };
 
 $("button.close").click(function() {
+	console.log('cross has been pressed');
+	// Function empties all lists of players that 
+	// have been selected
 	EmptyTeamArrays();
-	alert('button close being called');
-	//alert(home_team);
+	// Resets the sidebar display where players that
+	// have been selected appear
 	DisplayPlayerNames("home-team", []);
 	DisplayPlayerNames("away-team", []);
-	//remove all search results returned from server side
-	//in the html 
-	$('.search-results').html(' ');
+	// Removes all search results that have been 
+	// returned from the server side. All search results 
+	// have been returned to html elemented with 
+	// id = 'search-results' as specified in the 
+	// below line.
+	$(".search-results").html(' ');
+	// Reset match details form inputs are located inside
+	// a div with an id="match-details-submission-form".
+	$("#match-details-submission-form")[0].reset();
+	HideNext();
 });
 
 //Functions is called when a user clicks on a player's name when
 //making a team selection. This will check if the player has already
 //been selected by consulting either of the above arrays - 'home_team' or 
 //'away_team'.
-function PlayerNameToggle(sender){
+//function PlayerNameToggle(sender){
+//	//alert(sender.id);
+//	//alert($(sender).attr('value'));
+//	var player_name = $(sender).attr('value');
+//	
+//	//Below IF statements handle the toggling mechanism of the player names.
+//	//If the player is in the team, then they will be removed
+//	//from the list by looking up the index of the player name 
+//	//and remove data at that index using the 'splice' function. 
+//	//If they are not in the team, they will be 'push'ed onto the 
+//	//end of their team list. 
+//	if ( sender.parentNode.className === "home-team" ){
+//		if ( CheckIfPlayerInTeam(player_name, home_team) ){
+//			//alert('PLAYER IN HOME TEAM');
+//			var player_name_index = home_team.indexOf(player_name);
+//			//alert(player_name_index);
+//			//home_team.splice(player_name_index, player_name_index+1);
+//			home_team.splice(player_name_index, 1);
+//		}
+//		else{
+//			//alert('PLAYER NOT IN HOME TEAM');
+//			home_team.push(player_name);
+//		}
+//
+//		//create a function which displays all the selected player in the sidebar 
+//		DisplayPlayerNames('home-team', home_team);
+//
+//		if ( home_team.length === 6 ){
+//			DisplayNext();
+//		}
+//
+//		if ( home_team.length < 6 ){
+//			HideNext();
+//		}
+//	}
+//	//It is a little repetitive repeating the same sets of code
+//	//for the home_team and away_team, however with JS being a 
+//	//pass by value language, this avoid a lot of complications 
+//	//associated with creating a function to automate this task.
+//	else{
+//		//alert('away team');
+//		if ( CheckIfPlayerInTeam(player_name, away_team) ){
+//			//alert('PLAYER IN AWAY TEAM');
+//			var player_name_index = away_team.indexOf(player_name);
+//			away_team.splice(player_name_index, player_name_index+1);
+//		}
+//		else{
+//			//alert('PLAYER NOT IN AWAY TEAM');
+//			away_team.push(player_name);
+//		}
+//
+//		DisplayPlayerNames('away-team', away_team);
+//
+//		if ( away_team.length === 6 ){
+//			DisplayNext();
+//		}
+//
+//		if ( away_team.length < 6 ){
+//			HideNext();
+//		}
+//	}
+//};
+
+function TeamsheetDisplayToggle(sender){
 	//alert(sender.id);
 	//alert($(sender).attr('value'));
 	var player_name = $(sender).attr('value');
-	
+
 	//Below IF statements handle the toggling mechanism of the player names.
 	//If the player is in the team, then they will be removed
 	//from the list by looking up the index of the player name 
@@ -80,60 +151,43 @@ function PlayerNameToggle(sender){
 	//If they are not in the team, they will be 'push'ed onto the 
 	//end of their team list. 
 	if ( sender.parentNode.className === "home-team" ){
-		if ( CheckIfPlayerInTeam(player_name, home_team) ){
-			//alert('PLAYER IN HOME TEAM');
-			var player_name_index = home_team.indexOf(player_name);
-			//alert(player_name_index);
-			//home_team.splice(player_name_index, player_name_index+1);
-			home_team.splice(player_name_index, 1);
-		}
-		else{
-			//alert('PLAYER NOT IN HOME TEAM');
-			home_team.push(player_name);
-		}
-
-		//create a function which displays all the selected player in the sidebar 
-		DisplayPlayerNames('home-team', home_team);
-
-		if ( home_team.length === 6 ){
-			DisplayNext();
-		}
-
-		if ( home_team.length < 6 ){
-			HideNext();
-		}
+		home_team = CreateTeamsheetList('home-team', player_name, home_team);
+		DisplayPlayerNames("home-team", home_team);
+		ToggleNextButtonInTeamsheetModalBox(home_team);
+	} 
+	else {
+		away_team = CreateTeamsheetList('away-team', player_name, away_team);
+		DisplayPlayerNames("away-team", away_team);
+		ToggleNextButtonInTeamsheetModalBox(away_team);
 	}
-	//It is a little repetitive repeating the same sets of code
-	//for the home_team and away_team, however with JS being a 
-	//pass by value language, this avoid a lot of complications 
-	//associated with creating a function to automate this task.
+}
+
+function ToggleNextButtonInTeamsheetModalBox(team_list) {
+	if (team_list.length >= 6 && team_list.length <= 13) {
+		// console.log('TOGGLE BUTTON');
+		DisplayNext();
+	}
 	else{
-		//alert('away team');
-		if ( CheckIfPlayerInTeam(player_name, away_team) ){
-			//alert('PLAYER IN AWAY TEAM');
-			var player_name_index = away_team.indexOf(player_name);
-			away_team.splice(player_name_index, player_name_index+1);
-		}
-		else{
-			//alert('PLAYER NOT IN AWAY TEAM');
-			away_team.push(player_name);
-		}
-
-		DisplayPlayerNames('away-team', away_team);
-
-		if ( away_team.length === 6 ){
-			DisplayNext();
-		}
-
-		if ( away_team.length < 6 ){
-			HideNext();
-		}
+		// console.log('NOT YET');
+		HideNext();
 	}
-	//alert('HOME TEAM');
-	//alert(home_team);
-	//alert('AWAY TEAM');
-	//alert(away_team);	
-};
+}
+
+function CreateTeamsheetList(parentNode_className, player_name, team_list) {
+	// console.log(parentNode_className, player_name, team_list);
+	if ( CheckIfPlayerInTeam(player_name, team_list) ){
+		// console.log('PLAYER IN HOME TEAM');
+		var player_name_index = team_list.indexOf(player_name);
+		// alert(player_name_index);
+		team_list.splice(player_name_index, 1);
+	}
+	else{
+		// console.log('PLAYER NOT IN HOME TEAM');
+		team_list.push(player_name);
+	}
+	
+	return team_list;
+}
 
 function CheckIfPlayerInTeam(player_name, team_name){
 	if (team_name.includes(player_name)) {
@@ -224,14 +278,6 @@ $("form#match-details-submission-form").submit(function(e){
 			).attr('value',away_team
 			).appendTo(this);
 		alert(this);
-//		$('<input />').attr('type','hidden'
-//			).attr('name','home-team-name'
-//			).attr('value',home_team_name
-//			).appendTo(this);
-//		$('<input />').attr('type','hidden'
-//			).attr('name','away-team-name'
-//			).attr('value',away_team_name
-//			).appendTo(this);
 	}
 	else {
 		// The user DOES NOT WANT to submit the form and start scoring. 
@@ -242,4 +288,3 @@ $("form#match-details-submission-form").submit(function(e){
 		alert("Form has not been submitted just yet");
 	}
 });
-

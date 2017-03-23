@@ -20,17 +20,6 @@ class TeamnameSearchForm(forms.Form):
 
     query = forms.CharField(label=False)
 
-#    query = forms.CharField(
-#            widget=forms.TextInput(attrs={
-#                'placeholder': 'Enter team name',
-#                'class': 'form-control',
-#                'id': 'team-name-search',
-#                'size':  160,
-#                'value':  '',
-#                }),
-#            label=False
-#            )
-
 
 class MatchDetailsForm(forms.ModelForm):
     """

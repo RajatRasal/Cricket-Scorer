@@ -64,9 +64,8 @@ class TeamSearch(View):
         self.data_name = 'names'
         self.data = ''
         self.render_file = 'search_results.html'
-        # properties below will be used to construct the sql query
-        self.table_name = 'searching_team'
-        self.column_name = 'team_name'
+        # SQL into which a parameter can be passed
+        self.sql = 'SELECT team_name FROM searching_team WHERE team_name LIKE %s'
         # form properties
         self.placeholder = "Enter Team Name"
         self.id = "team-name-search"
@@ -97,21 +96,20 @@ class TeamSearch(View):
             # in order to convert from db object to an iterable
             # form is vulnerable to injection here !!!!!
             # CREATE 2 TESTS
-            print("""QUERY: SELECT %s FROM %s WHERE %s LIKE '%s%s%s';""" %
-                  (self.column_name, self.table_name,
-                   self.column_name, '%', query, '%'))
+#            print("""QUERY: SELECT %s FROM %s WHERE %s LIKE '%s%s%s';""" %
+#                  (self.column_name, self.table_name,
+#                   self.column_name, '%', query, '%'))
+            print('QUERY: ', end='')
+            print(self.sql % (query+'%'))
             # unsafe query
-            self.cursor.execute(
-                """SELECT %s FROM %s
-                    WHERE %s LIKE '%s%s%s';""" %
-                (self.column_name, self.table_name,
-                 self.column_name, '%', query, '%'))
+            # self.cursor.execute("""SELECT %s FROM %s WHERE %s LIKE '%s%s%s';"""
+            #                    % (self.column_name, self.table_name,
+            #                       self.column_name, '%', query, '%'))
             # safe query, has no semicolon, so python parameterises everything
-            # self.cursor.execute("""SELECT team_name FROM searching_team
-            #         WHERE team_name LIKE '%s%s%s'""" % ('%',query,'%'))
+            self.cursor.execute(self.sql, ['%'+query+'%'])
 
             self.data = list(map(lambda z: z[0], self.cursor.fetchall()))
-            print(self.data)
+            print('Results: {}'.format(self.data))
             # team_names = list(Team.objects.filter(team_name__icontains=query))
 
             # creates a format which can be passed into the html
@@ -151,8 +149,8 @@ class PlayerSearch(TeamSearch):
         # Initialising the parent class
         super().__init__()
         # properties below will be used to construct the sql query
-        self.table_name = 'searching_player'
-        self.column_name = 'player_name'
+        self.sql = '''SELECT player_name FROM searching_player
+                        WHERE player_name LIKE %s'''
         # form properties
         self.placeholder = 'Enter player name'
         self.id = 'player-name-search'
@@ -162,7 +160,6 @@ class TeamSelection(View):
 
     def post(self, request):
         print('Team Selection POST')
-        # form = GeneralTextForm(request.POST)
         form = request.POST
         print('REQUEST.POST', form)
 
@@ -321,19 +318,19 @@ class MatchDetails(ScoringInterface):
               match_details['batting_first'][0],
               match_details['overs'])
 
-        #All the non integer data types need to be converted specific
+        # All the non integer data types need to be converted specific
         print("""INSERT INTO searching_match
                             (date, ground_location, umpire_1, umpire_2, weather,
                             away_team_id, home_team_id, batting_first, overs)
                             VALUES (DATE('now'), %s, %s, %s, %s, %s, %s,
                             %s, %s)""" % (str(match_details['ground_location']),
-                                            str(match_details['umpire_1'][0]),
-                                            str(match_details['umpire_2'][0]),
-                                            int(match_details['weather'][0]),
-                                            int(match_details['away_team'][0]),
-                                            int(match_details['home_team'][0]),
-                                            str(match_details['batting_first'][0]),
-                                            int(match_details['overs'][0])))
+                                          str(match_details['umpire_1'][0]),
+                                          str(match_details['umpire_2'][0]),
+                                          int(match_details['weather'][0]),
+                                          int(match_details['away_team'][0]),
+                                          int(match_details['home_team'][0]),
+                                          str(match_details['batting_first'][0]),
+                                          int(match_details['overs'][0])))
 
         self.cursor.execute("""INSERT INTO searching_match
                             (date, ground_location, umpire_1, umpire_2, weather,
@@ -377,6 +374,11 @@ class MatchDetails(ScoringInterface):
 #            mtp.save()
             # issue - the playerslists are being reutned as one long string
 
+        # prepares ball-by-ball db for scoring by loading up the latest added
+        # record in the matches db
+        self.cursor.execute("""INSERT INTO scoring_ballbyball (match_id_id)
+                       SELECT id AS match_id_id FROM searching_match
+                            ORDER BY match_id_id DESC LIMIT 1""")
         return HttpResponseRedirect("/scoring/")
         # return render(request, 'scoring.html')
 

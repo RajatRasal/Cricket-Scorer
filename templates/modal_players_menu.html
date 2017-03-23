@@ -16,12 +16,15 @@
 							<div class="input-group">
 								{{ player_name_form.query }}
 								<span class="input-group-btn">here
-								<button class='btn btn-search' type="submit">search</button>
+								<button class='btn btn-search' type="submit">
+									search
+								</button>
 								</span>
 							</div>
 						</div><br>
 					</form>
-					<div class="col-md-12 column teams" style="position:relative; max-height:200px; overflow-y:scroll;"> 
+					<div class="col-md-12 column teams" style="position:relative; 
+						max-height:200px; overflow-y:scroll;"> 
 						<form method="POST" id="player-name-selection-form" action="">
 							{% csrf_token %}
 							<div class="search-results" id="player-name-selection-div">
@@ -31,13 +34,16 @@
 	       						When the user selects a team name, it will be added to this 
 							form and then submitted when this form is submitted-->
 							{{ hidden_text_input_form.general_input }}
-							<button type="submit" class="player-names" id="player-name-selection-submit"></button>
+							<button type="submit" class="player-names" 
+								id="player-name-selection-submit"></button>
 						</form>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default next-button" data-backdrop="static" data-keyboard="false" data-dismiss="modal" data-toggle="modal" data-target="#player-stats" onclick="HideNext()">Next</button>
+				<button type="button" class="btn btn-default next-button" data-backdrop="static" 
+					data-keyboard="false" data-dismiss="modal" data-toggle="modal"
+				       	data-target="#player-stats" onclick="HideNext()">Next</button>
 			</div>
 		</div>
 	</div>
@@ -53,15 +59,22 @@
 				<div class="w3-content w3-text-grey"> 
 					<h2 class="w3-text-grey" align="center">{{ name }}Statistics</h2>
 					<hr style="width:560px" class="w3-opacity">
-					<div class="stats" id="player-stats" style="position:relative; overflow-y:scroll; height:280px">
+					<div class="stats" id="player-stats" style="position:relative; 
+						overflow-y:scroll; height:280px">
 						<!--Player stats will be returned to this point-->
+						<!--A server side script will look for the field with 
+						the id="player-stats" and change the text between its 
+						html tags. Thus filling up this space.-->
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-backdrop="static" data-keyboard="false" data-dismiss="modal" data-toggle="modal" data-target="#player-details">Return</button>
+				<button type="button" class="btn btn-default" data-backdrop="static" 
+					data-keyboard="false" data-dismiss="modal" data-toggle="modal" 
+					data-target="#player-details">
+					Return
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
-

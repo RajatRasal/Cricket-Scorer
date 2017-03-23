@@ -71,7 +71,6 @@ class Match(models.Model):
     umpire_2 = models.CharField(max_length=50, blank=True, null=True)
     weather = models.CharField(max_length=30,
                                choices=(
-                                   ('0', ' '),
                                    ('1', 'sunny'),
                                    ('2', 'sunny spells'),
                                    ('3', 'windy'),
@@ -146,5 +145,4 @@ class MatchTeamPlayer(models.Model):
     date = models.DateField(default=datetime.now, blank=True, null=True)
 
     def __str__(self):
-        return str(self.match_id)
-
+        return str(self.player_id)
