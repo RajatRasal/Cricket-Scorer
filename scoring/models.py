@@ -21,11 +21,12 @@ class BallByBall(models.Model):
     ball_in_over = models.IntegerField(default=0, blank=True, null=True)
     total_runs = models.IntegerField(default=0, blank=True, null=True)
     total_wickets = models.IntegerField(default=0, blank=True, null=True)
-    how_out = models.CharField(default=0, max_length=20, blank=True, null=True)
-    people_involved = models.IntegerField(default=0, blank=True, null=True)
+    how_out = models.CharField(max_length=20, blank=True, null=True)
+    people_involved = models.CharField(max_length=30, blank=True, null=True)
     runs = models.IntegerField(default=0, blank=True, null=True)
     extras = models.IntegerField(default=0, blank=True, null=True)
-    extras_type = models.CharField(default=0, max_length=20, blank=True, null=True)
+    extras_type = models.CharField(max_length=20, blank=True, null=True)
+    innings = models.IntegerField(default=1)
 
     def __str__(self):
         return 'Match: {}, Ball: {}.{}'.format(self.match_id,

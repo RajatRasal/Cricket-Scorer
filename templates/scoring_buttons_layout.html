@@ -6,9 +6,11 @@
 </div><br>
 <div class="row">
 	<div class="col-xs-12" align="center">
-		<div class="">
-			Last 10 deliveries &#8209; 
+		<div class="last_10_row">
+			Last 10 deliveries <!--&#8209;-->
+			<div id="last_10_balls">
 			{% include "./scoring_last_10_balls.html" %}
+			</div>
 		</div>
 	</div>
 </div><br>
@@ -16,7 +18,14 @@
 	<div class="" align="center">
 		{% include "./scoring_buttons.html" %}
 	</div>
+	<br>
 </div><br>
-<div class="row" align="right">
-	{% include "./scoring_buttons_events.html" %}
+<div class="row">
+	<div class="col-sm-6" id="player-selection" align="center">
+		<!-- this is where the ajax request will render the 
+	 		 list of players -->
+	</div>
+	<div class="col-sm-6">
+		{% include "./scoring_buttons_events.html" %}
+	</div>
 </div>

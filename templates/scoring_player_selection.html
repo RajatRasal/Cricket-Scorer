@@ -1,0 +1,12 @@
+<div id="inner-player-selection">
+	<h4>{{ title }}</h4>
+	<select id="names-list" name="names-list" style="background:black">
+		{% for option in query %}
+	{% comment %}Each option is a player name{% endcomment %}
+		<option value="{{ option }}">{{ option }}</option>
+		{% endfor %}
+	</select> &nbsp;&nbsp;{{ fieldname }} 
+	<input type="button" value="Choose" 
+	onclick="set_player_names_to_current_ball_details('{{ fieldname }}');">
+	</input>
+</div><br>

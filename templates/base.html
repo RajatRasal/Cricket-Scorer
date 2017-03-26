@@ -48,82 +48,90 @@
 </nav>
 
 <!-- modal button display -->
-	<div class="modal fade" id="scoring-guide" role="dialog">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">SCORING-GUIDE MODAL BOX</h4>
-				</div>
-				<div class="modal-body">
-					<p>This contains the body of a modal text box</p>
-				</div>
-				<div class="modal-footer">
-					<p>MODAL FOOTER</p>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+<div class="modal fade" id="scoring-guide" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">SCORING-GUIDE MODAL BOX</h4>
+			</div>
+			<div class="modal-body">
+				<p>This contains the body of a modal text box</p>
+			</div>
+			<div class="modal-footer">
+				<p>MODAL FOOTER</p>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="modal fade" id="user-manual" role="dialog">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">User Manual Popup</h4>
-				</div>
-				<div class="modal-body">
-					<p>This contains the body of a modal text box</p>
-				</div>
-				<div class="modal-footer">
-					<p>MODAL FOOTER</p>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+<div class="modal fade" id="user-manual" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">User Manual Popup</h4>
+			</div>
+			<div class="modal-body">
+				<p>This contains the body of a modal text box</p>
+			</div>
+			<div class="modal-footer">
+				<p>MODAL FOOTER</p>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="modal fade" id="contact" role="dialog">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Contact Developer Popup</h4>
-				</div>
-				<div class="modal-body">
-					<!-- Contact Section -->
-					<div class="w3-content w3-text-grey" id="contact">
-						<h2 class="w3-text-grey" align="center">Contact Me</h2>
-						<hr style="width:270px" class="w3-opacity">
-						
-						<div class="w3-section">
-							<p><i class="glyphicon glyphicon-map-marker w3-text-black w3-xxlarge w3-margin-right"></i> London, UK</p>
-							<p><i class="glyphicon glyphicon-envelope w3-text-black w3-xxlarge w3-margin-right"> </i> Email: 123@xyz.com</p>
-						</div><br>
-						<p>Lets get in touch. Send me a message:</p>
-						
-						<form action="form.asp" target="_blank">
-							<p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
-							<p><input class="w3-input w3-padding-16" type="text" placeholder="Email" required name="Email"></p>
-							<p><input class="w3-input w3-padding-16" type="text" placeholder="Subject" required name="Subject"></p>
-							<p><input class="w3-input w3-padding-16" type="text" placeholder="Message" required name="Message"></p>
-							<p align="center">
-							<br>
-							<button class="w3-btn w3-light-grey w3-padding-large" type="submit">
+<div class="modal fade" id="contact" role="dialog">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<!-- Contact Section -->
+				<div class="w3-content w3-text-grey" id="contact">
+					<h2 class="w3-text-grey" align="center">Contact Me</h2>
+					<hr style="position:relative;width:100%" class="w3-opacity">
+					<div class="w3-section" align="center">
+						<p>
+							<i class="glyphicon glyphicon-map-marker w3-text-black 
+								w3-xxlarge w3-margin-right"></i> 
+							London, UK
+						</p>
+						<p>
+							<i class="glyphicon glyphicon-envelope w3-text-black 
+								w3-xxlarge w3-margin-right"> </i> 
+							Email: yugiohrajat1@gmail.com 
+						</p>
+						<p>Send me a message. Any Feedback appreciated</p>
+					</div>	
+					<hr style="position:relative;width:100%" class="w3-opacity">	
+					<form action="form.asp" target="_blank">
+						<p><input class="w3-input w3-padding-16" type="text" 
+							placeholder="Name" name="Name"></p>
+						<p><input class="w3-input w3-padding-16" type="text" 
+							placeholder="Email" required name="Email*"
+				    pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"></p>
+						<p><input class="w3-input w3-padding-16" type="text" 
+							placeholder="Subject" required name="Feedback*"></p>
+						<br>
+						<p align="center">
+							<button class="w3-btn w3-light-grey w3-padding-large" 
+								type="submit">
 								SEND MESSAGE
 							</button>
-							</p>
-						</form>
-					</div>
-					<!-- End Contact Section -->
+						</p>
+					</form>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+				<!-- End Contact Section -->
 			</div>
+			<div class="modal-footer"></div>
 		</div>
 	</div>
+</div>
 
 
 <!-- Navbar on small screens (Hidden on medium and large screens) -->
@@ -164,4 +172,3 @@
 
 </body>
 </html>
-

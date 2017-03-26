@@ -13,6 +13,7 @@ from searching.forms import (TeamnameSearchForm,
                              GeneralTextForm,
                              AjaxTestForm,
                              )
+from searching.algorithms import merge_sort
 from scoring.views import ScoringInterface
 
 
@@ -72,15 +73,14 @@ class TeamSearch(View):
 
     def post(self, request):
         print('Team Search POST')
-        print('REQUEST', request)
-        print('REQUEST', request.POST)
+        # print('REQUEST', request)
+        # print('REQUEST', request.POST)
         form = TeamnameSearchForm(request.POST,
                                   placeholder=self.placeholder, id=self.id)
-        print(form)
+        # print(form)
 
         if form.is_valid():  # Add my own validation here
-            print('INPUT IS VALID')
-
+            # print('INPUT IS VALID')
             # ADD SOME VALIDATION TO CHECK IF THE TEAM NAME ENTERED IS ALREADY
             # IN THE DATABASE UNDER THE CURRENT MATCH. IF SO, MOVE TO THE ELSE
             # STATEMENT SO NO NAMES ARE RETURNED.
@@ -88,19 +88,19 @@ class TeamSearch(View):
 
             # takes the searched for text from the POSt request and 'cleans' it
             query = form.cleaned_data['query']
-            print('cleaned input/query: {}'.format(query))
-            print(type(query))
+            # print('cleaned input/query: {}'.format(query))
+            # print(type(query))
 
             # Querying the db with a command akin to like SQL statement
             # (read the doc for details about __icontains) converted to list
             # in order to convert from db object to an iterable
             # form is vulnerable to injection here !!!!!
             # CREATE 2 TESTS
-#            print("""QUERY: SELECT %s FROM %s WHERE %s LIKE '%s%s%s';""" %
-#                  (self.column_name, self.table_name,
-#                   self.column_name, '%', query, '%'))
-            print('QUERY: ', end='')
-            print(self.sql % (query+'%'))
+            # print("""QUERY: SELECT %s FROM %s WHERE %s LIKE '%s%s%s';""" %
+            # (self.column_name, self.table_name,
+            # self.column_name, '%', query, '%'))
+            # print('QUERY: ', end='')
+            # print(self.sql % (query+'%'))
             # unsafe query
             # self.cursor.execute("""SELECT %s FROM %s WHERE %s LIKE '%s%s%s';"""
             #                    % (self.column_name, self.table_name,
@@ -109,21 +109,25 @@ class TeamSearch(View):
             self.cursor.execute(self.sql, ['%'+query+'%'])
 
             self.data = list(map(lambda z: z[0], self.cursor.fetchall()))
-            print('Results: {}'.format(self.data))
+            # print('Results: {}'.format(self.data))
+            self.data = merge_sort(self.data)
+            # print('Sorted Results: {}'.format(self.data))
             # team_names = list(Team.objects.filter(team_name__icontains=query))
 
             # creates a format which can be passed into the html
+            # CAN I MERGE THE PLAYERSEARCH AND TEAMSELECTION ONLY DIFFERENCE
+            # IS THAT CONTEXT INCLUDES QUERY IS TJAT NECESARY??????????????????
             context = Context({'query': query, self.data_name: self.data})
-            print('context: {}'.format(context))
+            # print('context: {}'.format(context))
 
             # Adds the context to the correct place on the page, by passing into
             # a separate mini html file 'search_results.html'.
             return_str = render_to_string(self.render_file, context)
-            print('returned string: {}'.format(return_str))
+            # print('returned string: {}'.format(return_str))
 
             # Returns the mini html page as a JSON response to be displayed
             # in the search results on the index.html page.
-            print("=================================================")
+            # print("=================================================")
             return HttpResponse(
                 json.dumps(return_str),
                 content_type="application/json")
@@ -160,16 +164,16 @@ class TeamSelection(View):
 
     def post(self, request):
         print('Team Selection POST')
-        form = request.POST
-        print('REQUEST.POST', form)
+        # form = request.POST
+        # print('REQUEST.POST', form)
 
         team_name = str(dict(request.POST)['general_input'][0])
-        print('TEAM NAME', team_name)
+        # print('TEAM NAME', team_name)
 
         cursor = connection.cursor()
-        print("""QUERY: SELECT player_name FROM searching_player
-        WHERE current_team_name_id=(SELECT id FROM searching_team
-        WHERE team_name=%s);""" % (team_name))
+        # print("""QUERY: SELECT player_name FROM searching_player
+        # WHERE current_team_name_id=(SELECT id FROM searching_team
+        # WHERE team_name=%s);""" % (team_name))
         cursor.execute("""SELECT player_name FROM searching_player
         WHERE current_team_name_id=(
         SELECT id FROM searching_team WHERE team_name=%s);""", [team_name])
@@ -181,17 +185,19 @@ class TeamSelection(View):
         # ['player 1', 'player 2', 'player 3'...]
         # The output of the 'map' is returned as a 'map' object, so needs
         # to be converted to a list.
-        player_names = list(map(lambda z: z[0], cursor.fetchall()))
-        print(player_names)
+        player_names = merge_sort(list(map(lambda z: z[0], cursor.fetchall())))
+        # print('unsorted: {}'.format(player_names))
+        # player_names = merge_sort(player_names)
+        # print('sorted: {}'.format(player_names))
 
         # creates a format which can be passed into the html
         context = Context({'player_names': player_names})
-        print('context: {}'.format(context))
+        # print('context: {}'.format(context))
 
         # Adds the context to the correct place on the page, by passing into a
         # separate mini html file 'team_player_results.html'.
         return_str = render_to_string('team_player_results.html', context)
-        print('returned string: {}'.format(return_str))
+        # print('returned string: {}'.format(return_str))
 
         return HttpResponse(
             json.dumps(return_str),
@@ -310,7 +316,7 @@ class MatchDetails(ScoringInterface):
         print('MATCH DETAILS DICTIONARY ALTERNATION: {}'.format(match_details))
 
         print(match_details['ground_location'],
-              match_details['umpire_1'][0],
+                   match_details['umpire_1'][0],
               match_details['umpire_2'][0],
               match_details['weather'][0],
               match_details['away_team'],
@@ -359,7 +365,7 @@ class MatchDetails(ScoringInterface):
             player_id, team_id = self.cursor.fetchone()
             print(team_id)
             self.cursor.execute("""SELECT id FROM searching_match
-                           ORDER BY id DESC LIMIT 1""")
+                                ORDER BY id DESC LIMIT 1""")
             match_id = self.cursor.fetchone()[0]
             print(match_id)
             print('Player id = {}, Team id = {}, Match id = {}'.format(
@@ -376,9 +382,11 @@ class MatchDetails(ScoringInterface):
 
         # prepares ball-by-ball db for scoring by loading up the latest added
         # record in the matches db
-        self.cursor.execute("""INSERT INTO scoring_ballbyball (match_id_id)
-                       SELECT id AS match_id_id FROM searching_match
-                            ORDER BY match_id_id DESC LIMIT 1""")
+        self.cursor.execute("""INSERT INTO scoring_ballbyball
+                            (match_id_id, over, ball_in_over, total_runs,
+                            total_wickets, runs, extras, innings) VALUES
+                            ((SELECT id AS match_id_id FROM searching_match
+                            ORDER BY match_id_id DESC LIMIT 1),0,0,0,0,0,0,1)""")
         return HttpResponseRedirect("/scoring/")
         # return render(request, 'scoring.html')
 

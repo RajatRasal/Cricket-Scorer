@@ -1,20 +1,46 @@
+<!-- All event handlers directly coded into the HTML are being used
+	to change the JSON object in the client side before it is actually
+	sent off by an event listener -->
+<div id="scoring-runs-group">
 <div class="btn-group" id="runs-scored">
 	<button type="button" class="btn btn-success btn-circle btn-title" disabled>Runs</button>
-	<button type="button" class="btn btn-info btn-circle"><b>⊙</b></button>
-	<button type="button" class="btn btn-info btn-circle">1</button>
-	<button type="button" class="btn btn-info btn-circle">2</button>
-	<button type="button" class="btn btn-info btn-circle">3</button>
-	<button type="button" class="btn btn-info btn-circle">4</button>
-	<button type="button" class="btn btn-info btn-circle">5</button>
-	<button type="button" class="btn btn-info btn-circle">6</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(0); increment_ball();">0</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(1); increment_ball();">1</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(2); increment_ball();">2</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(3); increment_ball();">3</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(4); increment_ball();">4</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(5); increment_ball();">5</button>
+	<button type="button" class="btn btn-info btn-circle" 
+		onclick="runs_batting(6); increment_ball();">6</button>
 </div>
 <div class="btn-group" id="extras">
 	<button type="button" class="btn btn-success btn-circle btn-title" disabled>Extras</button>
-	<button type="button" class="btn btn-warning btn-circle">Wb</button>
-	<button type="button" class="btn btn-warning btn-circle">Nb</button>
-	<button type="button" class="btn btn-warning btn-circle">Lb</button>
-	<button type="button" class="btn btn-warning btn-circle">B</button>
-	<button type="button" class="btn btn-warning btn-circle">P</button>
-	<button type="button" class="btn btn-primary btn-circle">Sh</button>
-	<button type="button" class="btn btn-danger btn-circle">Wi</button>
+	<button type="button" class="btn btn-warning btn-circle"
+		onclick="extras_bowling('wd', 
+			runs_confirmation_box('Confirm the number of wides'));">Wb</button>
+	<button type="button" class="btn btn-warning btn-circle"
+		onclick="extras_bowling('nb',
+  			runs_confirmation_box('Confirm number of no balls'));">Nb</button>
+	<button type="button" class="btn btn-warning btn-circle"
+		onclick="extras_fielding('lb',
+  			runs_confirmation_box('Confirm number of leg byes'));
+			increment_ball();">Lb</button>
+	<button type="button" class="btn btn-warning btn-circle"
+		onclick="extras_fielding('b',
+  			runs_confirmation_box('Confirm number of byes'));
+			increment_ball();">B</button>
+	<button type="button" class="btn btn-warning btn-circle"
+	       onclick="extras_penalties()">P</button>
+	<button type="button" class="btn btn-primary btn-circle"
+		       onclick="short_run();
+		       increment_ball();">Sh</button>
+	<button type="button" class="btn btn-danger btn-circle"
+		onclick="wicket(); increment_ball();">Wi</button>
 </div><br>
+</div>
