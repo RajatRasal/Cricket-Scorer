@@ -158,6 +158,15 @@ function undo(){
 }
 
 function reset_undo(){
+	console.log('reset undo');
+	console.log(current_data['people_involved']);
+	if (current_data['people_involved'] === 'UNDO'){
+		console.log('HERE');
+		setTimeout(function(){
+			console.log('UNDO timeout');},
+			1000);
+		window.location.reload();
+	}
 	current_data['people_involved'] = '';
 }
 
@@ -172,7 +181,6 @@ function end_over(){
 	current_data['bowler'] = null;
 	// calls get to request server for new bowler name
 	// and opens dropdown where new bowler can be selected
-	get_and_set_ball_by_ball_JSON(current_data);
 	// swap batters 
 	swap_batters(1);
 	// manually swap batter positions
@@ -184,6 +192,8 @@ function end_over(){
 	// the server side db has not yet been updated with
 	// new bowler's name 
 	get_and_set_live_stats(get('live_stats','html'));
+	get_and_set_ball_by_ball_JSON(current_data);
+	// window.location.reload(true);
 }
 
 function end_innings(){
@@ -359,12 +369,22 @@ function end_innings(){
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // AJAX Requests or AJAX callers 
-$("div#scoring-runs-group button").click(function(){
+$("div#scoring-runs-group button, button#undo").click(function(){
 	console.log('EVENT HANDLER');
 	// AJAX POST is automatically setting the value for the current
 	// data once returned because Javascript is fully pass-by-reference.  
 	console.log('data to be sent: ', current_data);
-	current_data = post(current_data);
+	if (current_data['people_involved'] === 'UNDO'){
+		console.log('UNDO EVENT');
+		current_data = post(current_data);
+		setTimeout(function(){
+			window.location.reload();},
+			1000);
+	if (current_data['
+	} else {
+		current_data= post(current_data);
+	}
+	//current_data = post(current_data);
 	console.log('data returned: ', current_data);
 	// swapping batsmen in the JSON
 	set_details_for_next_ball();
