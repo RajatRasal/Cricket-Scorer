@@ -1,7 +1,3 @@
-# will contain db stack class
-# predictive regression class
-# report creation class
-# emails and text messages class?
 from django.db import connection
 
 
@@ -14,15 +10,23 @@ class DatabaseStackImplementation:
     """
 
     def __init__(self):
+        # connector to the database
         self.items = connection.cursor()
 
     def peek(self):
-        # print('PEEK')
+        print('peek')
+        # returns all the attribute/column names from the ball by ball table
         self.items.execute("""PRAGMA table_info(scoring_ballbyball)""")
+        # gets all the data returned by the query from the buffers and converts
+        # it to a more readable list format
         column_names = list(map(lambda x: x[1], list(self.items.fetchall())))
-        self.items.execute("""SELECT * FROM scoring_ballbyball
-                           ORDER BY id DESC LIMIT 1""")
+        # gets the last record from the ball by ball database, thus is it
+        # getting the last ball that has been bowled in the game
+        self.items.execute("""SELECT * FROM scoring_ballbyball ORDER BY id DESC LIMIT 1""")
+        # gets all the data returned by the last query from the buffers and converts
+        # it to a more readable list format
         last_ball = list(self.items.fetchone())
+        # merges the columns names and the last ball lists to form a dictionary
         context = dict(zip(column_names, last_ball))
         return context
 
@@ -58,10 +62,14 @@ class Queries:
         self.cursor = connection.cursor()
         # Returns the value of the innings columns for the last record in the
         # scoring_ballbyball table.
-        self.match_id = self.cursor.execute("""SELECT match_id_id FROM scoring_ballbyball
-                                            ORDER BY id DESC LIMIT 1""").fetchone()[0]
-        self.innings = self.cursor.execute("""SELECT innings FROM scoring_ballbyball
-                                   ORDER BY id DESC LIMIT 1""").fetchone()[0]
+        # self.match_id, self.innings = self.cursor.execute("""SELECT match_id_id, innings
+        #                                                 FROM scoring_ballbyball
+        #                                    ORDER BY id DESC LIMIT 1""").fetchone()[0]
+        self.match_id, self.innings = self.cursor.execute("""SELECT match_id_id, innings
+                                                          FROM scoring_ballbyball
+                                            ORDER BY id DESC LIMIT 1""").fetchone()
+        # self.innings = self.cursor.execute("""SELECT innings FROM scoring_ballbyball
+        #                          ORDER BY id DESC LIMIT 1""").fetchone()[0]
         self.batting_first = self.cursor.execute("""SELECT batting_first FROM searching_match
                                          ORDER BY id DESC LIMIT 1""").fetchone()[0]
         print('Match id: {} Innings: {} Batting First: {}'.format(
@@ -72,16 +80,29 @@ class Queries:
             self.innings == 2 and self.batting_first == "away"):
             # the current batting team will be the home team these conditions
             print('HOME')
-            self.current_batting = self.cursor.execute("""SELECT home_team_id FROM searching_match
-                                               ORDER BY id DESC LIMIT 1""").fetchone()[0]
-            self.current_bowling = self.cursor.execute("""SELECT away_team_id FROM searching_match
-                                               ORDER BY id DESC LIMIT 1""").fetchone()[0]
+            # self.current_batting = self.cursor.execute("""
+            #                                SELECT home_team_id FROM searching_match
+            #                                ORDER BY id DESC LIMIT
+            #                                1""").fetchone()[0]
+            # self.current_bowling = self.cursor.execute("""
+            #                                SELECT away_team_id FROM searching_match
+            #                                ORDER BY id DESC LIMIT
+            #                                1""").fetchone()[0]
+            self.current_batting, self.current_bowling = self.cursor.execute("""
+                                            SELECT home_team_id, away_team_id FROM searching_match
+                                            ORDER BY id DESC LIMIT 1""").fetchone()
+            # self.current_bowling = self.cursor.execute("""SELECT away_team_id FROM searching_match
+            #                                   ORDER BY id DESC LIMIT 1""").fetchone()[0]
         if (self.innings == 2 and self.batting_first == "home") or (
             self.innings == 1 and self.batting_first == "away"):
-            self.current_batting = self.cursor.execute("""SELECT away_team_id FROM searching_match
-                                               ORDER BY id DESC LIMIT 1""").fetchone()[0]
-            self.current_bowling = self.cursor.execute("""SELECT home_team_id FROM searching_match
-                                               ORDER BY id DESC LIMIT 1""").fetchone()[0]
+            # self.current_batting, self.current_bowling = self.cursor.execute("""
+            #                                SELECT away_team_id, home_team_id FROM searching_match
+            #                                ORDER BY id DESC LIMIT 1""").fetchone()[0]
+            self.current_batting, self.current_bowling = self.cursor.execute("""
+                                            SELECT away_team_id, home_team_id FROM searching_match
+                                            ORDER BY id DESC LIMIT 1""").fetchone()
+            # self.current_bowling = self.cursor.execute("""SELECT home_team_id FROM searching_match
+            #                                   ORDER BY id DESC LIMIT 1""").fetchone()[0]
 
     def get_all_available_batters(self):
         # Gets all the player names from the searching_player table which have

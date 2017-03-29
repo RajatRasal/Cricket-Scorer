@@ -32,6 +32,7 @@ function clear_stats_rows_display(){
 }
 
 function get_and_set_ball_by_ball_JSON(current_data){
+	// set_details_for_next_ball();
 	$("#over").html(current_data["over"]+'.'+current_data["ball_in_over"]);
 	score=current_data["total_runs"]+'/'+current_data["total_wickets"];
 	if (current_data["innings"] == 1){
@@ -305,9 +306,9 @@ function short_run(){
 function wicket(){
 	
 	message = "How out?\n1.Bowled\n2.Stumped'\n3.Retired\n\
-	4.Run Out\n5.LBW\n6.Other"
+	4.Run Out\n5.LBW"
 	var how_out = prompt(message);
-	while (how_out.match(/^[1234567]$/) === null){
+	while (how_out.match(/^[12345]$/) === null){
 		how_out = prompt('Try again.',message);
 	}
 	console.log('how out: ', how_out);
@@ -379,10 +380,16 @@ $("div#scoring-runs-group button, button#undo").click(function(){
 		current_data = post(current_data);
 		setTimeout(function(){
 			window.location.reload();},
-			1000);
-	if (current_data['
+			100);
+	// if (current_data['
+		// PROBLEM WITH POSTING OF THE WICKETS COLUMN
+	} else if (current_data['how_out'] != ''){
+		console.log('here');
+		current_data = post(current_data);
+		current_data['how_out'] = '';
+		// window.location.reload();},
 	} else {
-		current_data= post(current_data);
+		current_data = post(current_data);
 	}
 	//current_data = post(current_data);
 	console.log('data returned: ', current_data);
@@ -463,7 +470,7 @@ function get(query, datatype){
 }
 
 $("a.twitter-post").click(function(){
-	// alert('button clicked');
+	alert('button clicked');
 	// add ajax request here
 	$.ajax({
 		url: 'http://localhost:9080/',
@@ -476,4 +483,12 @@ $("a.twitter-post").click(function(){
 			alert('error ' + textStatus + " " + errorThrown);
 		}
 	});
+	//var data = {'message':'this'};
+	//$.ajax({
+	//	url: 'http://localhost:9080/',
+	//	type: 'POST',
+	//	data: JSON.stringify(data),
+	//	contentType: "application/json",
+		// complete: callback
+	//})
 });

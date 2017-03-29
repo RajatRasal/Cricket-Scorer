@@ -4,7 +4,8 @@ var mail = require('nodemailer');
 
 // We need a function which handles requests and send response
 function handleRequest(request, response){
-	// response.end('It Works!! Path Hit: ' + request.url);
+	console.log(request);
+	console.log('REQUEST: ',request['message']);
 	call_twitter_post();
 	response.writeHead(200, {'Content-type':'text/plain'});
 	response.end('callback(\'{"message": "Hello"}\')');
@@ -20,11 +21,13 @@ var server = http.createServer(handleRequest);
 server.listen(PORT, function(){
 	// Callback triggered when server is successfully listening. Hurray!
 	console.log("Server listening on: http://localhost:%s", PORT);
+	// console.log('here');
 });
 
 // Link with all my Twitter API Keys  
 // https://apps.twitter.com/app/13556714/keys
-function call_twitter_post() {
+function call_twitter_post(){
+	console.log('____________________________________++++++++++++++++++++');
 	// Acts as a import statement to import the 'twit' library specified 
 	// as an argument to the require function. This 'twit' library is found 
 	// in the 'node_modules' folder inside this directory where the require 
@@ -74,10 +77,8 @@ function call_twitter_post() {
 }
 
 // Creates a reusable transporter object taking advantage of SMTP's standards
-let transporter = nodemailer.createTransport({
-	service: "gmail",
-	auth: {
-		user: "yugiohrajat1@gmail.com",
-	}
-
-
+// let transporter = nodemailer.createTransport({
+//	service: "gmail",
+//	auth: {
+//		user: "yugiohrajat1@gmail.com",
+// 	}

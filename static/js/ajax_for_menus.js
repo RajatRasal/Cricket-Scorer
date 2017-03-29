@@ -2,24 +2,21 @@
 //OF THE INDEX.HTML FILE ALONG WITH THE MENUS.JS FILE.
 
 //Test form 
-$('#search-form').submit(function(e){
-		//alert('again');
-		console.log( $(this).serialize() );
-		$.post('/ajax_test/', $(this).serialize(), function(data){
-			console.log( $('.teams').html(data) );
-			$('.teams').html(data);
-		}); 
-		console.log('here');
-		e.preventDefault();
-});
+//$('#search-form').submit(function(e){
+//		//alert('again');
+//		console.log( $(this).serialize() );
+//		$.post('/ajax_test/', $(this).serialize(), function(data){
+//			console.log( $('.teams').html(data) );
+//			$('.teams').html(data);
+//		}); 
+//		console.log('here');
+//		e.preventDefault();
+//});
 
 //AJAX POST
 //When the form with the id 'team-name-search-form' is submitted,
 //the below function is called.  
 $('form#team-name-search-form').submit(function(e){
-		//alert('team searched');
-		//alert($(this).serialize());
-		//alert($(this).attr('class'));
 	//This is an AJAX routine. It will make a post request to the URL
 	//with the path 'team_search', with the team name entered in the form.
 	//The server side is listening for a client request at this URL,
@@ -31,9 +28,7 @@ $('form#team-name-search-form').submit(function(e){
 			//passed in between the html tags with the class
 			//'teams'.
 			$('div#team-name-selection-div').html(data);
-			//$('.away-team#team-name-selection-div').html(data);
 		}); 
-		//alert('finished');
 		e.preventDefault();
 });
 

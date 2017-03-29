@@ -164,16 +164,10 @@ class TeamSelection(View):
 
     def post(self, request):
         print('Team Selection POST')
-        # form = request.POST
-        # print('REQUEST.POST', form)
 
         team_name = str(dict(request.POST)['general_input'][0])
-        # print('TEAM NAME', team_name)
 
         cursor = connection.cursor()
-        # print("""QUERY: SELECT player_name FROM searching_player
-        # WHERE current_team_name_id=(SELECT id FROM searching_team
-        # WHERE team_name=%s);""" % (team_name))
         cursor.execute("""SELECT player_name FROM searching_player
         WHERE current_team_name_id=(
         SELECT id FROM searching_team WHERE team_name=%s);""", [team_name])

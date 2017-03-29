@@ -109,7 +109,7 @@
 						<p>Send me a message. Any Feedback appreciated</p>
 					</div>	
 					<hr style="position:relative;width:100%" class="w3-opacity">	
-					<form action="form.asp" target="_blank">
+					<form target="_blank">
 						<p><input class="w3-input w3-padding-16" type="text" 
 							placeholder="Name" name="Name"></p>
 						<p><input class="w3-input w3-padding-16" type="text" 
@@ -120,7 +120,8 @@
 						<br>
 						<p align="center">
 							<button class="w3-btn w3-light-grey w3-padding-large" 
-								type="submit">
+								type="button"
+								id="email-post">
 								SEND MESSAGE
 							</button>
 						</p>
@@ -159,6 +160,23 @@
 </div>
 
 <script src="{% static 'js/jquery.min.js' %}"></script>
+<script>
+$("button#email-post").click(function(){
+	// alert('button clicked');
+	// add ajax request here
+	$.ajax({
+		url: 'http://localhost:9080/',
+		dataType: "jsonp",
+		jsonpCallback: "callback", // callback parameter
+		cache: false,
+		timeout: 5000,
+		success: function(data) {alert(data);},
+		error: function(jqXHR, textStatus, errorThrown) {
+			alert('error ' + textStatus + " " + errorThrown);
+		}
+	});
+});
+</script>
 {% block body_js %}
 {% endblock %}
 
