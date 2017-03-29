@@ -204,63 +204,111 @@ class Statistics(View):
         self.cursor = connection.cursor()
         # properties below will be used to construct the sql query
         self.table = ""
-        self.column_name = ""
-        self.column_names = ""
+        # self.column_name = ""
+        # self.column_names = ""
+        self.results = []
 
-    def post(self, request):
-        print('STATS POST')
-        print('REQUEST POST:', request.POST)
+    def apost(self, request):
         form = GeneralTextForm(request.POST, class_name="", id="hidden-input")
-        print(form)
-        print(self.table)
-
         name = str(dict(request.POST)['general_input'][0])
-
-        print("""QUERY: SELECT * FROM %s
-        WHERE %s='%s'""" % (self.table, self.column_name, name))
-        self.cursor.execute("""SELECT * FROM %s
-        WHERE %s='%s'""" % (self.table, self.column_name, name))
-        # fetchall returns query results for one column in the format:
-        # [(col1, col2, col3, col4,)] <-- single tuple with in list
-        # So we can access the all this data in an iterable format, one
-        # column at a time, we take the 0th index of the returned list to
-        # access the tuple.
-        stats = [[a, b] for a, b in zip(self.column_names,
-                                        self.cursor.fetchall()[0]) if b != name]
-        print(stats)
-
-        # creates a format which can be passed into the html
         context = Context({'name': name, 'statistics': stats})
-        print('context: {}'.format(context))
-
-        # Adds the context to the correct place on the page, by passing
-        # into a separate mini html file 'team_player_results.html'.
         return_str = render_to_string('statistics.html', context)
-        print('returned string: {}'.format(return_str))
-
         return HttpResponse(
             json.dumps(return_str),
             content_type="application/json")
 
+    def get_matches_played(self, name):
+        self.cursor.execute("""SELECT 'Matches Played', COUNT(*) FROM
+                            (SELECT DISTINCT match_id_id FROM scoring_ballbyball
+                            WHERE onstrike=%s OR offstrike=%s)""",[name, name] )
+        return self.cursor.fetchone()
 
-class PlayerStatistics(Statistics):
+    def get_total_runs_scored(self, name):
+        self.cursor.execute("""SELECT 'Total Runs Scored', SUM(runs) FROM
+                            (SELECT runs FROM scoring_ballbyball
+                            WHERE onstrike=%s)""", [name])
+        return self.cursor.fetchone()
+
+    def get_high_score(self, name):
+        self.cursor.execute("""SELECT 'High Score', MAX(sr) FROM
+                            (SELECT SUM(runs) AS sr FROM scoring_ballbyball
+                            WHERE onstrike=%s GROUP BY match_id_id)""", [name])
+        return self.cursor.fetchone()
+
+    def get_batting_average(self,name):
+        # Total runs scored divided by total innings played
+        self.cursor.execute("""SELECT 'Batting Average', AVG(sr) FROM
+                            (SELECT SUM(runs) AS sr FROM scoring_ballbyball
+                            WHERE onstrike=%s GROUP BY match_id_id)""", [name])
+        return self.cursor.fetchone()
+
+    def get_batting_strike_rate(self,name):
+        # (Total runs scored / total balls faced ) * 100
+        self.cursor.execute("""SELECT 'Batting Strike Rate', ar*100 FROM
+                            (SELECT AVG(runs) as ar FROM scoring_ballbyball
+                            WHERE onstrike=%s)""", [name])
+        return self.cursor.fetchone()
+
+    def get_bowling_runs(self, name):
+        #
+        self.cursor.execute("""SELECT 'Bowling Runs Conceded', SUM(runs) FROM
+                            (SELECT runs FROM scoring_ballbyball
+                            WHERE bowler=%s)""",[name])
+        return self.cursor.fetchone()
+
+    def get_wickets_taken(self, name):
+
+        self.cursor.execute("""SELECT 'Wickets Taken', COUNT(*) FROM
+                            (SELECT * FROM scoring_ballbyball
+                            WHERE bowler=%s AND how_out<>'')""",[name])
+        return self.cursor.fetchone()
+
+    def get_best_bowling(self, name):
+        self.cursor.execute("""SELECT 'Best Bowling', r||'/'||w FROM (
+                            SELECT SUM(CASE how_out WHEN '' THEN 0 ELSE 1 END) AS w,
+                            sum(runs) as r FROM scoring_ballbyball WHERE bowler=%s GROUP BY
+                            match_id_id ORDER BY w DESC LIMIT 1)""", [name])
+        return self.cursor.fetchone()
+
+    def get_bowling_economy(self, name):
+        # ( total runs scores / total balls bowled ) * 6
+        # conversion to integer is needed
+        self.cursor.execute("""SELECT 'Bowling Econ', (r/c)*6 FROM
+                            (SELECT cast(SUM(runs) as float) as r,
+                            cast(COUNT(*) as float) as c
+                            FROM scoring_ballbyball
+                            WHERE bowler=%s)""", [name])
+        return self.cursor.fetchone()
+
+class PlayerStatistics(Statistics, View):
 
     def __init__(self):
         super().__init__()
         self.table = "searching_player"
         self.column_name = "player_name"
-        # returns a list of all the column names
-        self.column_names = self.cursor.execute("""
-                PRAGMA table_info('%s')""" % (self.table)).fetchall()
-        # Add regex to remove the underscores in the column names and replace
-        # with spaces. Example of Python FUNCTIONAL PROGRAMMING.
-        self.column_names = list(map(lambda z: sub('_', ' ', str(z[1])),
-                                     self.column_names))
-        # Remove any column names which have the term 'id' in them.
-        # Example of Python FUNCTIONAL PROGRAMMING.
-        self.column_names = list(filter(lambda z: 'id' not in z,
-                                        self.column_names))
-        print(self.column_names)
+
+
+    def post(self, request):
+        form = GeneralTextForm(request.POST, class_name="", id="hidden-input")
+        # Gives us the name of the player who has been selected in the client
+        # side. This is the player about whom statistics are to be displayed.
+        name = str(dict(request.POST)['general_input'][0])
+
+        self.results = [self.get_matches_played(name), self.get_total_runs_scored(name),
+                        self.get_high_score(name), self.get_batting_average(name),
+                        self.get_batting_strike_rate(name), self.get_bowling_runs(name),
+                        self.get_wickets_taken(name), self.get_best_bowling(name),
+                        self.get_bowling_economy(name)]
+
+        context = Context({'statistics': self.results})
+
+        # Adds the context to the correct place on the page, by passing
+        # into a separate mini html file 'team_player_results.html'.
+        return_str = render_to_string('statistics.html', context)
+
+        return HttpResponse(
+            json.dumps(return_str),
+            content_type="application/json")
 
 
 class TeamStatistics(Statistics):

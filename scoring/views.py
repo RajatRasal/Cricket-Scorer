@@ -1,16 +1,16 @@
 import json
 
 from django.views.generic import View
-from django.shortcuts import (render,
-                              HttpResponse,
-                              render_to_response,)
+from django.shortcuts import render, HttpResponse
 from django.template.loader import render_to_string
 from django.template import Context
 
 from .algorithms import DatabaseStackImplementation, Queries
 
 
-class ScoringInterface(View, DatabaseStackImplementation):
+# class ScoringInterface(View,DatabaseStackImplementation):
+
+class ScoringInterface(View):
 
     def __init__(self):
         super(ScoringInterface, self).__init__()
@@ -20,6 +20,7 @@ class ScoringInterface(View, DatabaseStackImplementation):
             self.player_selection_file = "scoring_player_selection.html"
             self.player_live_stats_file = "scoring_live_stats_players_row.html"
             self.ballbyball_live_stats_file = "scoring_last_10_balls.html"
+            # self.database_stack = DatabaseStackImplementation()
             self.database_stack = DatabaseStackImplementation()
             self.last_ball = self.database_stack.peek()
             # print(self.last_ball)

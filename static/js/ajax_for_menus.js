@@ -17,8 +17,9 @@
 //When the form with the id 'team-name-search-form' is submitted,
 //the below function is called.  
 $('form#team-name-search-form').submit(function(e){
-	//This is an AJAX routine. It will make a post request to the URL
-	//with the path 'team_search', with the team name entered in the form.
+	//$.post is an AJAX routine. It will make a HTTP POST request to the 
+	//localhost URL at the path name 'team_search', with the team 
+	//name entered in the form.
 	//The server side is listening for a client request at this URL,
 	//as seen in the 'urls.py' file in the 'cricket_scoring' dir.
 	//'function(data)' parameter speficies a function to run if the 

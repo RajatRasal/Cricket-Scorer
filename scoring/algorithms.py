@@ -23,8 +23,8 @@ class DatabaseStackImplementation:
         # gets the last record from the ball by ball database, thus is it
         # getting the last ball that has been bowled in the game
         self.items.execute("""SELECT * FROM scoring_ballbyball ORDER BY id DESC LIMIT 1""")
-        # gets all the data returned by the last query from the buffers and converts
-        # it to a more readable list format
+        # gets all the data returned by the last query from the buffers and
+        # converts it to a more readable list format
         last_ball = list(self.items.fetchone())
         # merges the columns names and the last ball lists to form a dictionary
         context = dict(zip(column_names, last_ball))
@@ -51,9 +51,10 @@ class DatabaseStackImplementation:
         # previous ball since the data in the returned record will then be
         # updated in the client side.
         self.items.execute("""DELETE FROM scoring_ballbyball WHERE id=%s""",
-                            [ball_event['id']])
+                           [ball_event['id']])
         print(self.peek())
         return self.peek()
+
 
 class Queries:
 
@@ -62,18 +63,14 @@ class Queries:
         self.cursor = connection.cursor()
         # Returns the value of the innings columns for the last record in the
         # scoring_ballbyball table.
-        # self.match_id, self.innings = self.cursor.execute("""SELECT match_id_id, innings
-        #                                                 FROM scoring_ballbyball
-        #                                    ORDER BY id DESC LIMIT 1""").fetchone()[0]
         self.match_id, self.innings = self.cursor.execute("""SELECT match_id_id, innings
                                                           FROM scoring_ballbyball
-                                            ORDER BY id DESC LIMIT 1""").fetchone()
-        # self.innings = self.cursor.execute("""SELECT innings FROM scoring_ballbyball
-        #                          ORDER BY id DESC LIMIT 1""").fetchone()[0]
+                                                          ORDER BY id DESC LIMIT 1
+                                                          """).fetchone()
         self.batting_first = self.cursor.execute("""SELECT batting_first FROM searching_match
                                          ORDER BY id DESC LIMIT 1""").fetchone()[0]
-        print('Match id: {} Innings: {} Batting First: {}'.format(
-            self.match_id, self.innings, self.batting_first))
+        # print('Match id: {} Innings: {} Batting First: {}'.format(
+        #    self.match_id, self.innings, self.batting_first))
         # current_batting is a string with the name of the team currently
         # batting
         if (self.innings == 1 and self.batting_first == "home") or (
@@ -107,7 +104,6 @@ class Queries:
     def get_all_available_batters(self):
         # Gets all the player names from the searching_player table which have
         # been selected for the current match and returns their names
-        # print('GET ALL AVAILABLE BATTERS')
         self.cursor.execute("""select p.player_name from searching_player as p
                             inner join searching_matchteamplayer mtp
                             on mtp.player_id_id = p.id
@@ -121,7 +117,6 @@ class Queries:
     def get_all_available_bowlers(self):
         # Gets all the player names from the searching_player table which have
         # been selected for the current match and returns their names
-        # print('GET ALL AVAILABLE BOWLERS')
         self.cursor.execute("""select p.player_name from searching_player as p
                             inner join searching_matchteamplayer mtp
                             on mtp.player_id_id = p.id
@@ -180,7 +175,7 @@ class Queries:
                                             WHERE bowler=%s AND match_id_id=%s
                                             GROUP BY over
                                             HAVING SUM(runs)=0 )""",
-                                    [name, self.match_id]).fetchone()[0]
+                                      [name, self.match_id]).fetchone()[0]
         wickets = self.cursor.execute("""SELECT COUNT(*) FROM scoring_ballbyball
                                       WHERE how_out<>'' AND bowler=%s AND
                                       match_id_id=%s""",
@@ -218,8 +213,3 @@ class Queries:
 
     def get_max_over_limit(self):
         pass
-
-
-if "__main__" == __name__:
-    x = DatabaseStackImplementation()
-    print(x.peek())

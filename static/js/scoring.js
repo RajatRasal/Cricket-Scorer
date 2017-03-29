@@ -194,13 +194,6 @@ function end_over(){
 	// new bowler's name 
 	get_and_set_live_stats(get('live_stats','html'));
 	get_and_set_ball_by_ball_JSON(current_data);
-	// window.location.reload(true);
-}
-
-function end_innings(){
-	// empty batsmen and bowlers
-	console.log('end of innings');
-	current_data['innings'] = 2;
 }
 
 // This function will be called when any of the 0-6 runs buttons 
@@ -306,9 +299,9 @@ function short_run(){
 function wicket(){
 	
 	message = "How out?\n1.Bowled\n2.Stumped'\n3.Retired\n\
-	4.Run Out\n5.LBW"
+	4.Run Out\n5.LBW\n6.Caught"
 	var how_out = prompt(message);
-	while (how_out.match(/^[12345]$/) === null){
+	while (how_out.match(/^[123456]$/) === null){
 		how_out = prompt('Try again.',message);
 	}
 	console.log('how out: ', how_out);
@@ -332,6 +325,10 @@ function wicket(){
 			break;
 		case '5':
 			current_data['how_out'] = 'LBW';
+			current_data['onstrike'] = null;
+			break;
+		case '6':
+			current_data['how_out'] = 'caught':
 			current_data['onstrike'] = null;
 			break;
 	}
@@ -365,6 +362,7 @@ function end_innings(){
 		set_details_for_next_ball();
 	} else {
 		console.log('A team has won');
+		alert('END OF MATCH')
 	}
 }
 
@@ -483,12 +481,4 @@ $("a.twitter-post").click(function(){
 			alert('error ' + textStatus + " " + errorThrown);
 		}
 	});
-	//var data = {'message':'this'};
-	//$.ajax({
-	//	url: 'http://localhost:9080/',
-	//	type: 'POST',
-	//	data: JSON.stringify(data),
-	//	contentType: "application/json",
-		// complete: callback
-	//})
 });

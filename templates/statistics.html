@@ -9,11 +9,11 @@
 		</tr>
 	</thead>
 	<tbody>
-	{% for col_name,stat in statistics %}
+	{% for stat in statistics %}
 		<tr>
-		<th scope="row">{{ col_name }}</th>
-		<td>{{ stat }}</td>
+		<th scope="row">{{ stat.0 }}</th>
+		<td>{{ stat.1 }}</td>
 		</tr>
-	</tbody>
 	{% endfor %}
+	</tbody>
 </table>
