@@ -1,33 +1,22 @@
-// Lets require/import the HTTP module
+// require/import the HTTP module
 var http = require('http');
-var mail = require('nodemailer');
-
-// We need a function which handles requests and send response
-function handleRequest(request, response){
-	console.log(request);
-	console.log('REQUEST: ',request['message']);
-	call_twitter_post();
-	response.writeHead(200, {'Content-type':'text/plain'});
-	response.end('callback(\'{"message": "Hello"}\')');
-}
 
 // Lets define a port we want to listen to
 const PORT = 9080; 
 
 // Create a server
-var server = http.createServer(handleRequest);
+// We need a function which handles requests and send response
+var server = http.createServer(function(request, response){
+	var message = request.url.replace(/%20/g, " ");
+	call_twitter_post(message);
+});
 
 // Lets start our server
-server.listen(PORT, function(){
-	// Callback triggered when server is successfully listening. Hurray!
-	console.log("Server listening on: http://localhost:%s", PORT);
-	// console.log('here');
-});
+server.listen(PORT, function(){});
 
 // Link with all my Twitter API Keys  
 // https://apps.twitter.com/app/13556714/keys
-function call_twitter_post(){
-	console.log('____________________________________++++++++++++++++++++');
+function call_twitter_post(message){
 	// Acts as a import statement to import the 'twit' library specified 
 	// as an argument to the require function. This 'twit' library is found 
 	// in the 'node_modules' folder inside this directory where the require 
@@ -54,9 +43,8 @@ function call_twitter_post(){
 	// setInterval(post_score, 1000*20);
 	
 	function post_score() {
-		var r = Math.floor(Math.random()*100);
 		var tweet = {
-			status: 'HERE IS A RANDOM NUMBER '.concat(r),
+			status: message,
 		};
 		T.post('statuses/update', tweet, after_post);
 		
@@ -75,10 +63,3 @@ function call_twitter_post(){
 		}
 	}
 }
-
-// Creates a reusable transporter object taking advantage of SMTP's standards
-// let transporter = nodemailer.createTransport({
-//	service: "gmail",
-//	auth: {
-//		user: "yugiohrajat1@gmail.com",
-// 	}

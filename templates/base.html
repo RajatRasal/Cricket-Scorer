@@ -160,23 +160,6 @@
 </div>
 
 <script src="{% static 'js/jquery.min.js' %}"></script>
-<script>
-$("button#email-post").click(function(){
-	// alert('button clicked');
-	// add ajax request here
-	$.ajax({
-		url: 'http://localhost:9080/',
-		dataType: "jsonp",
-		jsonpCallback: "callback", // callback parameter
-		cache: false,
-		timeout: 5000,
-		success: function(data) {alert(data);},
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert('error ' + textStatus + " " + errorThrown);
-		}
-	});
-});
-</script>
 {% block body_js %}
 {% endblock %}
 

@@ -466,17 +466,19 @@ function get(query, datatype){
 }
 
 $("a.twitter-post").click(function(){
-	alert('button clicked');
 	// add ajax request here
-	$.ajax({
-		url: 'http://localhost:9080/',
-		dataType: "jsonp",
-		jsonpCallback: "callback", // callback parameter
-		cache: false,
-		timeout: 5000,
-		success: function(data) {alert(data);},
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert('error ' + textStatus + " " + errorThrown);
-		}
-	});
+	var twitter_post = "http://localhost:9080/" + 'Score is ' 
+		+ current_data['total_runs'] + ' for ' + current_data['total_wickets'];
+	$.post( twitter_post );
+//	$.ajax({
+//		url: 'http://localhost:9080/',
+//		dataType: "jsonp",
+//		jsonpCallback: "callback", // callback parameter
+//		cache: false,
+//		timeout: 5000,
+//		success: function(data) {alert(data);},
+//		error: function(jqXHR, textStatus, errorThrown) {
+//			alert('error ' + textStatus + " " + errorThrown);
+//		}
+//	});
 });
