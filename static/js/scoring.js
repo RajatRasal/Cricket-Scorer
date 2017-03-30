@@ -3,6 +3,7 @@ $(document).ready(function(){
 	console.log('Initial data: ', current_data);
 	get_and_set_ball_by_ball_JSON(current_data);
 	get_and_set_live_stats(get('live_stats','html'));
+	current_data['how_out'] = '';
 	console.log('FINISHED INITIAL');
 })
 
@@ -328,7 +329,7 @@ function wicket(){
 			current_data['onstrike'] = null;
 			break;
 		case '6':
-			current_data['how_out'] = 'caught':
+			current_data['how_out'] = 'caught';
 			current_data['onstrike'] = null;
 			break;
 	}
@@ -379,13 +380,10 @@ $("div#scoring-runs-group button, button#undo").click(function(){
 		setTimeout(function(){
 			window.location.reload();},
 			100);
-	// if (current_data['
-		// PROBLEM WITH POSTING OF THE WICKETS COLUMN
 	} else if (current_data['how_out'] != ''){
 		console.log('here');
 		current_data = post(current_data);
 		current_data['how_out'] = '';
-		// window.location.reload();},
 	} else {
 		current_data = post(current_data);
 	}
