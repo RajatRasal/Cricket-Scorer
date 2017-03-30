@@ -354,22 +354,21 @@ function end_innings(){
 		current_data['total_runs'] = 0;
 		current_data['total_wickets'] = 0;
 		current_data['innings'] = 2;
-		current_data['overs'] = 0;
-		current_data['balls_in_over'] = 0;
+		current_data['over'] = 0;
+		current_data['ball_in_over'] = 0;
 		current_data['onstrike'] = null;
 		current_data['offstrike'] = null;
 		current_data['bowler'] = null;
 		current_data['how_out'] = '';
 		set_details_for_next_ball();
 	} else {
-		console.log('A team has won');
 		alert('END OF MATCH')
 	}
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // AJAX Requests or AJAX callers 
-$("div#scoring-runs-group button, button#undo").click(function(){
+$("div#scoring-runs-group button, button#undo, button#end").click(function(){
 	console.log('EVENT HANDLER');
 	// AJAX POST is automatically setting the value for the current
 	// data once returned because Javascript is fully pass-by-reference.  
