@@ -1,3 +1,5 @@
+// The complex section of code needs to be set up to configure a security measure which 
+// must be in place for the client side to make AJAX requests.
 $.ajaxSetup({ 
      beforeSend: function(xhr, settings) {
          function getCookie(name) {

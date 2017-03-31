@@ -31,6 +31,8 @@ class DatabaseStackImplementation:
         return context
 
     def push(self, ball_event):
+    	# Pushes the last ball on to the top of the ball by ball stack
+    	# Pushes the last ball on as the lastest record added to the end of the ballbyball table 
         self.items.execute("""INSERT INTO scoring_ballbyball
                            (onstrike, offstrike, bowler, over, ball_in_over,
                            total_runs, total_wickets, how_out, people_involved,
@@ -52,14 +54,22 @@ class DatabaseStackImplementation:
         # updated in the client side.
         self.items.execute("""DELETE FROM scoring_ballbyball WHERE id=%s""",
                            [ball_event['id']])
-        print(self.peek())
         return self.peek()
 
 
 class Queries:
-
+	"""
+	Class contains many of the queries I will be using to produce live statistics to 
+	be displayed during the running of the game.
+	
+	I will not go into details about what each query does, but put a reference to the 
+	table in my design where I describe this in greater detail.
+	
+	THE PURPOSE OF EACH QUERY IS QUITE SELF EXPLANATORY BASED ON THE TITLE OF THE 
+	SUBROUTINE.
+	"""
+		
     def __init__(self):
-        print('INITIALISNG QUERIES -----------------')
         self.cursor = connection.cursor()
         # Returns the value of the innings columns for the last record in the
         # scoring_ballbyball table.
@@ -69,39 +79,20 @@ class Queries:
                                                           """).fetchone()
         self.batting_first = self.cursor.execute("""SELECT batting_first FROM searching_match
                                          ORDER BY id DESC LIMIT 1""").fetchone()[0]
-        # print('Match id: {} Innings: {} Batting First: {}'.format(
-        #    self.match_id, self.innings, self.batting_first))
-        # current_batting is a string with the name of the team currently
-        # batting
         if (self.innings == 1 and self.batting_first == "home") or (
             self.innings == 2 and self.batting_first == "away"):
             # the current batting team will be the home team these conditions
-            print('HOME')
-            # self.current_batting = self.cursor.execute("""
-            #                                SELECT home_team_id FROM searching_match
-            #                                ORDER BY id DESC LIMIT
-            #                                1""").fetchone()[0]
-            # self.current_bowling = self.cursor.execute("""
-            #                                SELECT away_team_id FROM searching_match
-            #                                ORDER BY id DESC LIMIT
-            #                                1""").fetchone()[0]
             self.current_batting, self.current_bowling = self.cursor.execute("""
                                             SELECT home_team_id, away_team_id FROM searching_match
                                             ORDER BY id DESC LIMIT 1""").fetchone()
-            # self.current_bowling = self.cursor.execute("""SELECT away_team_id FROM searching_match
-            #                                   ORDER BY id DESC LIMIT 1""").fetchone()[0]
         if (self.innings == 2 and self.batting_first == "home") or (
             self.innings == 1 and self.batting_first == "away"):
-            # self.current_batting, self.current_bowling = self.cursor.execute("""
-            #                                SELECT away_team_id, home_team_id FROM searching_match
-            #                                ORDER BY id DESC LIMIT 1""").fetchone()[0]
             self.current_batting, self.current_bowling = self.cursor.execute("""
                                             SELECT away_team_id, home_team_id FROM searching_match
                                             ORDER BY id DESC LIMIT 1""").fetchone()
-            # self.current_bowling = self.cursor.execute("""SELECT home_team_id FROM searching_match
-            #                                   ORDER BY id DESC LIMIT 1""").fetchone()[0]
 
     def get_all_available_batters(self):
+    	# table 2.11 - Query 8
         # Gets all the player names from the searching_player table which have
         # been selected for the current match and returns their names
         self.cursor.execute("""select p.player_name from searching_player as p
@@ -111,10 +102,10 @@ class Queries:
                             [self.match_id, self.current_batting])
         # add some code to make sure the batters are not in the mtp table either
         x = list(map(lambda x: x[0], list(self.cursor.fetchall())))
-        print('ALL AVAILABLE BATTERS: ',x)
         return x
 
     def get_all_available_bowlers(self):
+    	# table 2.11 - Query 9
         # Gets all the player names from the searching_player table which have
         # been selected for the current match and returns their names
         self.cursor.execute("""select p.player_name from searching_player as p
@@ -124,21 +115,23 @@ class Queries:
                             [self.match_id, self.current_bowling])
         # add some code to make sure the batters are not in the mtp table either
         x = map(lambda x: x[0], list(self.cursor.fetchall()))
-        print('result:' ,x)
         return x
 
     def get_live_batter_stats(self, name):
-        # print('GET LIVE BATTERS STATS')
+    	# table 2.11 - Query 10		
         runs = self.cursor.execute("""SELECT SUM(runs) FROM scoring_ballbyball
                                    WHERE onstrike=%s AND match_id_id=%s""",
                                    [name, self.match_id]).fetchone()[0]
+        # table 2.11 - Query 11
         balls = self.cursor.execute("""SELECT COUNT(*) FROM scoring_ballbyball
                                     WHERE onstrike=%s AND match_id_id=%s AND
                                     extras_type<>'wd' AND extras_type<>'nb'""",
                                     [name, self.match_id]).fetchone()[0]
+    	# table 2.11 - Query 12
         fours = self.cursor.execute("""SELECT COUNT(*) FROM scoring_ballbyball
                                     WHERE onstrike=%s AND match_id_id=%s AND
                                     runs=4""", [name, self.match_id]).fetchone()[0]
+    	# table 2.11 - Query 13
         sixes = self.cursor.execute("""SELECT COUNT(*) FROM scoring_ballbyball
                                     WHERE onstrike=%s AND match_id_id=%s AND
                                     runs=6""", [name, self.match_id]).fetchone()[0]
@@ -154,21 +147,21 @@ class Queries:
                        'strike_rate': round(int(runs)/int(balls),2)}
         except Exception:
             results = {'runs':0, 'balls':0, 'fours':0, 'sixes':0, 'strike_rate':0}
-        print('result: ', results)
         return results
 
     def get_live_bowler_stats(self, name):
-        print('GET LIVE BOWLER STATS')
+        # table 2.11 - Query 14
         runs = self.cursor.execute("""SELECT SUM(runs+extras) FROM scoring_ballbyball
                                    WHERE bowler=%s AND match_id_id=%s
                                    AND extras_type <> 'lb' AND extras_type <> 'b'
                                    AND extras_type <> 'penalties' """,
                                    [name, self.match_id]).fetchone()[0]
-        print(runs)
+        # table 2.11 - Query 15
         overs = self.cursor.execute("""SELECT COUNT(*) FROM (
                                     SELECT DISTINCT over FROM scoring_ballbyball
                                     WHERE bowler=%s AND match_id_id=%s )""",
                                     [name, self.match_id]).fetchone()[0]
+        # table 2.11 - Query 16
         maidens = self.cursor.execute("""SELECT COUNT(*) FROM (
                                             SELECT over, SUM(runs)
                                             FROM scoring_ballbyball
@@ -176,6 +169,7 @@ class Queries:
                                             GROUP BY over
                                             HAVING SUM(runs)=0 )""",
                                       [name, self.match_id]).fetchone()[0]
+        # table 2.11 - Query 17
         wickets = self.cursor.execute("""SELECT COUNT(*) FROM scoring_ballbyball
                                       WHERE how_out<>'' AND bowler=%s AND
                                       match_id_id=%s""",
@@ -184,20 +178,17 @@ class Queries:
         # conceeded off their bowling so the data is returning null value which
         # cannot be converted to an integer in the results dictionary.
         try:
-            print('TRY')
             results = {'runs': int(overs), 'balls': int(runs),
                        'fours': int(maidens), 'sixes': int(wickets),
                        'strike_rate': round(int(runs)/int(overs),2)}
         except Exception:
-            print('EXCEPT')
             results = {'runs': int(overs), 'balls': 0, 'fours': int(maidens),
                        'sixes': int(wickets), 'strike_rate': 0}
 
-        print('result: ', results)
         return results
 
     def get_last_ten_balls(self):
-        # print('GET LAST 10 BALLS')
+        # table 2.11 - Query 18
         last_10 = self.cursor.execute("""SELECT CASE WHEN how_out <> ''
                                                         THEN how_out
                                                      WHEN extras <> 0
@@ -208,8 +199,5 @@ class Queries:
                                       ORDER BY id DESC LIMIT 10""",
                                       [self.match_id]).fetchall()
         x = list(map(lambda x: x[0], list(last_10)))
-        print('LAST 10 BALLS: ', x)
         return x
-
-    def get_max_over_limit(self):
-        pass
+        

@@ -1,18 +1,6 @@
 //THIS FILE IS BEING PLACED AT THE END OF THE BODY 
 //OF THE INDEX.HTML FILE ALONG WITH THE MENUS.JS FILE.
 
-//Test form 
-//$('#search-form').submit(function(e){
-//		//alert('again');
-//		console.log( $(this).serialize() );
-//		$.post('/ajax_test/', $(this).serialize(), function(data){
-//			console.log( $('.teams').html(data) );
-//			$('.teams').html(data);
-//		}); 
-//		console.log('here');
-//		e.preventDefault();
-//});
-
 //AJAX POST
 //When the form with the id 'team-name-search-form' is submitted,
 //the below function is called.  
@@ -35,7 +23,6 @@ $('form#team-name-search-form').submit(function(e){
 
 //same as above but only for player search instead of team search 
 $('form#player-name-search-form').submit(function(e){
-		//alert('players searched');
 		$.post('/player_search/', $(this).serialize(), function(data){
 			$('div#player-name-selection-div').html(data);
 		}); 
@@ -43,7 +30,6 @@ $('form#player-name-search-form').submit(function(e){
 });
 
 function SelectNameDiv(name){
-	console.log('name clicked: '.concat($(name).attr('value')));
 	$("input#hidden-input").val($(name).attr('value'));
 	$($(name).submit().attr('id')).submit();
 	//There a hidden input fields which are being submitted by the Ajax 
@@ -64,50 +50,39 @@ function SelectNameDiv(name){
 		//modal box is submitted. 
 		away_team_name = $(name).attr('value');
 	}
-	//alert('finished');
 };
 
 function SetTeamNames(id,team_name) {
-	alert('SET TEAM NAMES');
-	alert(id.concat(team_name));
 	var options = document.getElementById('id_home_team').getElementsByTagName('option');
 	for (tag in options){
-		//alert(options[tag].innerHTML);
 		if (options[tag].innerHTML === team_name){
-			//alert(options[tag].value);
 			$('select#'.concat(id)).val(options[tag].value);
 		}
 	}
 };
 
+// Same as the above 2 AJAX requests on this is for the selection of team names 
+// and not just for searching.
 $('form#team-name-selection-form').submit(function(e){
-		//alert('team name selected'); 
 		e.preventDefault();
-		//alert('team selection submit');
-		//akes an AJAX post request to the server side
 		$.post('/team_selection/', $(this).serialize(), function(data){
-			//console.log( $('.teams #team-name-selection').html(data) );
 			//The data retrieved from the server side is now being 
 			//passed in between the html tags with the class
 			//'home-team' and the id 'player-name-selection-form'
 			$('div#player-name-selection-form').html(data);
 		});
 });
-//POSSIBLY MERGE THE 2 SUBMIT FORM LISTENER'S TOGETHER
 
-//<form method="POST" id="player-name-selection-form" action="">
+// Same as the above 3 AJAX requests on this is for the selection of player names 
+// and not just for searching.
 $('form#player-name-selection-form').submit(function(e){
-		//alert('team name selected'); 
 		e.preventDefault();
-		//alert('team selection submit');
-		//akes an AJAX post request to the server side
+		//makes an AJAX post request to the server side
 		$.post('/player_stats/', $(this).serialize(), function(data){
-			//console.log( $('.teams #team-name-selection').html(data) );
 			//The data retrieved from the server side is now being 
 			//passed in between the html tags with the class
 			//'home-team' and the id 'player-name-selection-form'
 			$('div.stats#player-stats').html(data);
 		});
 });
-//POSSIBLY MERGE THE 2 SUBMIT FORM LISTENER'S TOGETHER
 

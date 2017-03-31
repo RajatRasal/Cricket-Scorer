@@ -1,9 +1,8 @@
 //THIS FILE IS BEING PLACED AT THE END OF THE BODY 
 //OF THE INDEX.HTML FILE ALONG WITH THE AJAX.JS FILE.
 
+// This functions is called by default whenever the page is loaded.
 $(document).ready(function(){
-	alert('page loaded');
-	alert('page loaded');
 	$(".next-button").hide();
 	$("input#hidden-input").hide();	
 	//A 'hacky' way of hiding all the elements 
@@ -72,76 +71,7 @@ $("button.close").click(function() {
 	HideNext();
 });
 
-//Functions is called when a user clicks on a player's name when
-//making a team selection. This will check if the player has already
-//been selected by consulting either of the above arrays - 'home_team' or 
-//'away_team'.
-//function PlayerNameToggle(sender){
-//	//alert(sender.id);
-//	//alert($(sender).attr('value'));
-//	var player_name = $(sender).attr('value');
-//	
-//	//Below IF statements handle the toggling mechanism of the player names.
-//	//If the player is in the team, then they will be removed
-//	//from the list by looking up the index of the player name 
-//	//and remove data at that index using the 'splice' function. 
-//	//If they are not in the team, they will be 'push'ed onto the 
-//	//end of their team list. 
-//	if ( sender.parentNode.className === "home-team" ){
-//		if ( CheckIfPlayerInTeam(player_name, home_team) ){
-//			//alert('PLAYER IN HOME TEAM');
-//			var player_name_index = home_team.indexOf(player_name);
-//			//alert(player_name_index);
-//			//home_team.splice(player_name_index, player_name_index+1);
-//			home_team.splice(player_name_index, 1);
-//		}
-//		else{
-//			//alert('PLAYER NOT IN HOME TEAM');
-//			home_team.push(player_name);
-//		}
-//
-//		//create a function which displays all the selected player in the sidebar 
-//		DisplayPlayerNames('home-team', home_team);
-//
-//		if ( home_team.length === 6 ){
-//			DisplayNext();
-//		}
-//
-//		if ( home_team.length < 6 ){
-//			HideNext();
-//		}
-//	}
-//	//It is a little repetitive repeating the same sets of code
-//	//for the home_team and away_team, however with JS being a 
-//	//pass by value language, this avoid a lot of complications 
-//	//associated with creating a function to automate this task.
-//	else{
-//		//alert('away team');
-//		if ( CheckIfPlayerInTeam(player_name, away_team) ){
-//			//alert('PLAYER IN AWAY TEAM');
-//			var player_name_index = away_team.indexOf(player_name);
-//			away_team.splice(player_name_index, player_name_index+1);
-//		}
-//		else{
-//			//alert('PLAYER NOT IN AWAY TEAM');
-//			away_team.push(player_name);
-//		}
-//
-//		DisplayPlayerNames('away-team', away_team);
-//
-//		if ( away_team.length === 6 ){
-//			DisplayNext();
-//		}
-//
-//		if ( away_team.length < 6 ){
-//			HideNext();
-//		}
-//	}
-//};
-
 function TeamsheetDisplayToggle(sender){
-	//alert(sender.id);
-	//alert($(sender).attr('value'));
 	var player_name = $(sender).attr('value');
 
 	//Below IF statements handle the toggling mechanism of the player names.
@@ -162,27 +92,23 @@ function TeamsheetDisplayToggle(sender){
 	}
 }
 
+// Validates the number of players which have been selected in the teamsheet
+// for a team. There should be between 13 and 6.
 function ToggleNextButtonInTeamsheetModalBox(team_list) {
 	if (team_list.length >= 6 && team_list.length <= 13) {
-		// console.log('TOGGLE BUTTON');
 		DisplayNext();
 	}
 	else{
-		// console.log('NOT YET');
 		HideNext();
 	}
 }
 
 function CreateTeamsheetList(parentNode_className, player_name, team_list) {
-	// console.log(parentNode_className, player_name, team_list);
-	if ( CheckIfPlayerInTeam(player_name, team_list) ){
-		// console.log('PLAYER IN HOME TEAM');
+		if ( CheckIfPlayerInTeam(player_name, team_list) ){
 		var player_name_index = team_list.indexOf(player_name);
-		// alert(player_name_index);
 		team_list.splice(player_name_index, 1);
 	}
 	else{
-		// console.log('PLAYER NOT IN HOME TEAM');
 		team_list.push(player_name);
 	}
 	
@@ -199,9 +125,6 @@ function CheckIfPlayerInTeam(player_name, team_name){
 };
 
 function DisplayPlayerNames(team_name, teamsheet){
-	//alert('DISPLAY PLAYER NAMES');
-	//alert(team_name);
-	//alert(teamsheet);
 	//Contains the class names given by Bootstrap for special 
 	//design features of list elements. These special features will
 	//be used to high the captain, vc, wiki and 12th and 13th men.
@@ -213,7 +136,6 @@ function DisplayPlayerNames(team_name, teamsheet){
 	var teamsheet_html = '';
 	var template = '<li class="list-group-item {class}">{name} \
 		<span class="badge"></span> \</li>';
-	//alert(teamsheet);
 	for (var i = 0; i < teamsheet.length; i++){
 		//We insert the name of the player into the list element template
 		list_element = template.replace("{name}", teamsheet[i]);
@@ -244,7 +166,6 @@ function DisplayPlayerNames(team_name, teamsheet){
 	//of the list will appear as a html list either under the 
 	//home-team or away-team teamsheet, depending on which has 
 	//been specified in the 'team_name' argument for this function.
-	//var list_tag = 'ul.';
 	$('ul.'.concat(team_name)).html(teamsheet_html);
 	teamsheet_html = '';	
 };
@@ -262,7 +183,6 @@ function AreYouSure(message) {
 // Below function will be called when the final form on the user data entry 
 // menus is being submitted. 
 $("form#match-details-submission-form").submit(function(e){
-	alert('submit')
 	// AreYouSure function is being called from right above this function. 
 	// if ( AreYouSure("Once you submit you can start scoring.") === true ){
 	if ( AreYouSure("Once you submit you can start scoring.") === true ){
@@ -277,7 +197,6 @@ $("form#match-details-submission-form").submit(function(e){
 			).attr('name','away_team_teamsheet'
 			).attr('value',away_team
 			).appendTo(this);
-		alert(this);
 	}
 	else {
 		// The user DOES NOT WANT to submit the form and start scoring. 

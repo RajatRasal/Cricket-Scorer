@@ -11,8 +11,6 @@ have been created by the previous shell command.
 from datetime import datetime
 
 from django.db import models
-# from django.core.validators import MaxValueValidator, MinValueValidator
-
 
 class Team(models.Model):
     """ Table in the database containing a list of all the teams that
@@ -28,10 +26,10 @@ class Team(models.Model):
 
     def __str__(self):
         """
-        When a 'Team' record/object is referred to in the Django admin view, we
-        cannot display everything in the record. The value returned by this
-        function will be the value seen. So in this case, to represent a 'Team'
-        instance, you will see the value stored in the 'team_name' field for
+        When a 'Team' record/object is referred to in the Django admin view (according to 
+        searching/admin.py file) , we cannot display everything in the record. The value 
+        returned by this function will be the value seen. So in this case, to represent a 
+        'Team' instance, you will see the value stored in the 'team_name' field for
         that record.
         """
         return self.team_name

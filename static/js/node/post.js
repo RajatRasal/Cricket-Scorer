@@ -1,9 +1,7 @@
 // require/import the HTTP module
 var http = require('http');
-
 // Lets define a port we want to listen to
 const PORT = 9080; 
-
 // Create a server
 // We need a function which handles requests and send response
 var server = http.createServer(function(request, response){
@@ -11,9 +9,8 @@ var server = http.createServer(function(request, response){
 	call_twitter_post(message);
 });
 
-// Lets start our server
-server.listen(PORT, function(){});
-
+// Starts our Node.js server
+server.listen(PORT, function(){console.log('NODE server started');});
 // Link with all my Twitter API Keys  
 // https://apps.twitter.com/app/13556714/keys
 function call_twitter_post(message){
@@ -27,6 +24,9 @@ function call_twitter_post(message){
 	// from this main file. This should make them more secure when rendered 
 	// in the page or when put through source control becuase it can will 
 	// not add the config file to my open source repositories.
+	// The API keys are stored in the 'config' file - I will not reveal them 
+	// because this could provide any readers a secure way into my Twitter
+	// account.
 	var config = require('./config');
 	
 	// T is a twit object, where the twit library handles the interface/socket 
@@ -46,13 +46,16 @@ function call_twitter_post(message){
 		var tweet = {
 			status: message,
 		};
+		// posting my data to Twitter 
 		T.post('statuses/update', tweet, after_post);
-		
+		// ERROR HANDLING SYNTAX		
 		function after_post(err, data, response){
 			if (err) {
-				// REMEMEBER that Twitter does not like 
-				// the same status being posted twice 
-				// so this will more often than not be 
+				// Twitter does not like the same 
+				// status being posted twice in a row
+				// as it thinks someone is trying to 
+				// conduct a denial of service attack.
+				// So this will more often than not be 
 				// the cause of an error!
 				console.log("SOMETHING WENT WRONG");
 				console.log(err);

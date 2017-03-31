@@ -1,31 +1,28 @@
+// default function called when the page is loaded 
 $(document).ready(function(){
+	// post request made to the server to get data for the last
+	// ball stored in the database - THIS ALLOWS A USER TO RESUME 
+	// THEIR MATCH IF THEY HAVE ACCIDENTALLY CLOSED A SCORING SESSION.
 	current_data = post();
-	console.log('Initial data: ', current_data);
 	get_and_set_ball_by_ball_JSON(current_data);
+	// sets the part of the 
 	get_and_set_live_stats(get('live_stats','html'));
 	current_data['how_out'] = '';
-	console.log('FINISHED INITIAL');
 })
 
 function hide_player_selection_dropdown(){
-	// $("#inner-player-selection").hide();
-	// document.getElementById("inner-player-selection").css('visibility', 'hidden');
 	$("#player-selection").css('visibility', 'hidden'); 
 }
 
 function show_player_selection_dropdown(){
-	// console.log('show player dropdown');
-	// $("#inner-player-selection").show();
 	$("#player-selection").css('visibility', 'visible'); 
-	// document.getElementById("player-selection").style.visibility = "visible";
-	// document.getElementById("inner-player-selection").css('visibility', 'visible');
 }
-
-var current_data = {};
-var swap = false;
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Live stats displaying functions 
+var current_data = {};
+var swap = false;
+
 function clear_stats_rows_display(){
 	$("tr#batter-1-stats").html('<th scope="row" id="batter-1"></th>');
 	$("tr#batter-2-stats").html('<th scope="row" id="batter-2"></th>');
@@ -33,7 +30,6 @@ function clear_stats_rows_display(){
 }
 
 function get_and_set_ball_by_ball_JSON(current_data){
-	// set_details_for_next_ball();
 	$("#over").html(current_data["over"]+'.'+current_data["ball_in_over"]);
 	score=current_data["total_runs"]+'/'+current_data["total_wickets"];
 	if (current_data["innings"] == 1){
@@ -44,7 +40,7 @@ function get_and_set_ball_by_ball_JSON(current_data){
 
 	if (current_data['onstrike'] === null || current_data['onstrike'] === ''){
 		console.log('here');
-		// Gets all possible options for batter 1 from server 
+		// Gets all possible options for batter 1 names/players from server 
 		// side using the get functions which calls AJAX GET request
 		$("div#player-selection").html(get('onstrike', 'html'));
 		// Displays the selection box where users can pick which 
@@ -95,6 +91,8 @@ function set_player_names_to_current_ball_details(fieldname){
 	get_and_set_ball_by_ball_JSON(current_data);
 }
 
+// gets the dynamic HTML containing live produced stats from the server 
+// and displayed it in the correct locations on the HTML page
 function get_and_set_live_stats(live_stats){
 	try {
 		if (swap === true){
@@ -104,11 +102,7 @@ function get_and_set_live_stats(live_stats){
 			$("th#batter-1").after(live_stats['onstrike']);
 			$("th#batter-2").after(live_stats['offstrike']);
 		}
-		//console.log('batter 1: ',live_stats['onstrike']);
-		//console.log('batter 2: ',live_stats['offstrike']);
-		//console.log('bowler: ',live_stats['bowler']);
 		$("th#bowler").after(live_stats['bowler']);
-		//console.log('Last 10 balls: ',live_stats['last_10']);
 		$("div#last_10_balls").html(live_stats['last_10']);
 	} catch (err) {
 		console.log(err);
@@ -117,10 +111,13 @@ function get_and_set_live_stats(live_stats){
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Event handler functions for scoring buttons
+// I HAVE PROGRAMMED IN ALL THE LAWS OF CRCICKET HERE !!!!!!!!
+
 
 // Function used to clear any remaining data left over from the previous 
 // delivery which is still stored in the returned JSON.
 function set_details_for_next_ball(){
+	// physically swaps the position of the batters if the swap variable is True
 	if (swap === true){
 		current_data["onstrike"] = [current_data["offstrike"], 
 			current_data["offstrike"]=current_data["onstrike"]][0];
@@ -154,16 +151,14 @@ function increment_ball(){
 }
 
 function undo(){
-	console.log('undo');
 	current_data['people_involved'] = 'UNDO';
 	console.log(current_data);
 }
 
 function reset_undo(){
-	console.log('reset undo');
-	console.log(current_data['people_involved']);
 	if (current_data['people_involved'] === 'UNDO'){
-		console.log('HERE');
+	// undo requires a refresh for the AJAX function to have enough time 
+	// to store all the data in the server.
 		setTimeout(function(){
 			console.log('UNDO timeout');},
 			1000);
@@ -174,7 +169,6 @@ function reset_undo(){
 
 // Over will only end when function below is called. 
 function end_over(){
-	console.log('end over');
 	// reset ball in over counter
 	current_data['ball_in_over'] = 0;
 	// increment over counter 
@@ -297,16 +291,21 @@ function short_run(){
 	current_data['total_runs'] += scored;
 }
 
+// Handles how a wicket is taken in the app.
 function wicket(){
 	
 	message = "How out?\n1.Bowled\n2.Stumped'\n3.Retired\n\
 	4.Run Out\n5.LBW\n6.Caught"
 	var how_out = prompt(message);
+	// Trying to ensure that only a valid number has been selected
+	// from the numbers specified in the above message.
+
 	while (how_out.match(/^[123456]$/) === null){
 		how_out = prompt('Try again.',message);
 	}
-	console.log('how out: ', how_out);
 
+	// As per the laws of cricket, each of the different types of 
+	// wickets is handled a different way.
 	switch (how_out) {
 		case '1': 
 			current_data['how_out'] = 'bowled';
@@ -368,6 +367,9 @@ function end_innings(){
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // AJAX Requests or AJAX callers 
+
+// This function brings together all the smaller event handler functions I have 
+// define in the above section and calls them in the right order. 
 $("div#scoring-runs-group button, button#undo, button#end").click(function(){
 	console.log('EVENT HANDLER');
 	// AJAX POST is automatically setting the value for the current
@@ -387,13 +389,14 @@ $("div#scoring-runs-group button, button#undo, button#end").click(function(){
 		current_data = post(current_data);
 	}
 	//current_data = post(current_data);
-	console.log('data returned: ', current_data);
 	// swapping batsmen in the JSON
 	set_details_for_next_ball();
 	clear_stats_rows_display();
 	// diplaying swapped batsmen
 	get_and_set_ball_by_ball_JSON(current_data)
 	get_and_set_live_stats(get('live_stats','html'));
+	// Once all the data is returned from the server side, we need to clear
+	// some of the unnecessary stats.
 	reset_undo();
 });
 
@@ -413,8 +416,7 @@ function post(query){
 		// 'data' header is the actual data being sent 
 		// Converts all sending data to JSON format using 
 		// stringify.
-		// data: JSON.stringify(query), 
-		data: query, // { json_string: JSON.stringify(query) }, 
+		data: query, 
 		// 'datatype' header parses all returned data as JSON
 		// therefore there is no need to convert response to 
 		// JSON using JSON.parse().
@@ -434,7 +436,6 @@ function post(query){
 }
 
 function get(query, datatype){
-	// console.log('QUERY: '.concat(query));
 	return $.ajax({
 		// default AJAX request type = GET
 		// 'contentType' specifies to the server data 
@@ -464,20 +465,14 @@ function get(query, datatype){
 	})['responseJSON'];
 }
 
+// THIS EVENT LISTENER MAKES A REQUEST TO THE NODE JS SERVER 
+// CONTAINING THE DATA TO BE POSTED WHEN THE USER WANTS TO POST
+// SOMETHING TO TWITTER. 
+// AN AJAX POST REQUEST IS BEING MADE !!!!!!! 
 $("a.twitter-post").click(function(){
 	// add ajax request here
 	var twitter_post = "http://localhost:9080/" + 'Score is ' 
 		+ current_data['total_runs'] + ' for ' + current_data['total_wickets'];
 	$.post( twitter_post );
-//	$.ajax({
-//		url: 'http://localhost:9080/',
-//		dataType: "jsonp",
-//		jsonpCallback: "callback", // callback parameter
-//		cache: false,
-//		timeout: 5000,
-//		success: function(data) {alert(data);},
-//		error: function(jqXHR, textStatus, errorThrown) {
-//			alert('error ' + textStatus + " " + errorThrown);
-//		}
-//	});
+
 });

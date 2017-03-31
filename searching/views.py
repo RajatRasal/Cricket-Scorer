@@ -8,11 +8,7 @@ from django.template.loader import render_to_string
 from django.db import connection
 
 from searching.models import Team
-from searching.forms import (TeamnameSearchForm,
-                             MatchDetailsForm,
-                             GeneralTextForm,
-                             AjaxTestForm,
-                             )
+from searching.forms import TeamnameSearchForm, MatchDetailsForm, GeneralTextForm
 from searching.algorithms import merge_sort
 from scoring.views import ScoringInterface
 
@@ -32,12 +28,6 @@ class Base(View):
 class Index(View):
 
     def get(self, request):
-        # The specific 'class_name' and 'id' arguments should be
-        # placed in the constructor, however since these will
-        # only be called once in
-
-        # POSSIBLY ADD ALL THE CLASS_NAME AND ID TO THE __INIT__
-        # AND THEN INHERIT THIS IN ALL THE OTHER VIEWS !!!!
         hidden_text_input = GeneralTextForm(
                 class_name="home-team",
                 id="hidden-input")
@@ -48,7 +38,6 @@ class Index(View):
                 placeholder="Enter Player Name",
                 id="player-name-search")
         match_details_form = MatchDetailsForm()
-        print('hidden text field: %s' % (str(hidden_text_input)))
 
         return render(request, 'index.html',
                       {'team_name_form': teamname_search_form,
@@ -72,29 +61,13 @@ class TeamSearch(View):
         self.id = "team-name-search"
 
     def post(self, request):
-        print('Team Search POST')
-        # print('REQUEST', request)
-        # print('REQUEST', request.POST)
         form = TeamnameSearchForm(request.POST,
                                   placeholder=self.placeholder, id=self.id)
-        # print(form)
 
         if form.is_valid():  # Add my own validation here
-            # print('INPUT IS VALID')
-            # ADD SOME VALIDATION TO CHECK IF THE TEAM NAME ENTERED IS ALREADY
-            # IN THE DATABASE UNDER THE CURRENT MATCH. IF SO, MOVE TO THE ELSE
-            # STATEMENT SO NO NAMES ARE RETURNED.
-            # Add this in testing, where we make sure that this is not possible
-
             # takes the searched for text from the POSt request and 'cleans' it
             query = form.cleaned_data['query']
-            # print('cleaned input/query: {}'.format(query))
-            # print(type(query))
 
-            # Querying the db with a command akin to like SQL statement
-            # (read the doc for details about __icontains) converted to list
-            # in order to convert from db object to an iterable
-            # form is vulnerable to injection here !!!!!
             # CREATE 2 TESTS
             # print("""QUERY: SELECT %s FROM %s WHERE %s LIKE '%s%s%s';""" %
             # (self.column_name, self.table_name,
@@ -109,10 +82,7 @@ class TeamSearch(View):
             self.cursor.execute(self.sql, ['%'+query+'%'])
 
             self.data = list(map(lambda z: z[0], self.cursor.fetchall()))
-            # print('Results: {}'.format(self.data))
             self.data = merge_sort(self.data)
-            # print('Sorted Results: {}'.format(self.data))
-            # team_names = list(Team.objects.filter(team_name__icontains=query))
 
             # creates a format which can be passed into the html
             # CAN I MERGE THE PLAYERSEARCH AND TEAMSELECTION ONLY DIFFERENCE
@@ -123,11 +93,9 @@ class TeamSearch(View):
             # Adds the context to the correct place on the page, by passing into
             # a separate mini html file 'search_results.html'.
             return_str = render_to_string(self.render_file, context)
-            # print('returned string: {}'.format(return_str))
 
             # Returns the mini html page as a JSON response to be displayed
             # in the search results on the index.html page.
-            # print("=================================================")
             return HttpResponse(
                 json.dumps(return_str),
                 content_type="application/json")
@@ -180,19 +148,13 @@ class TeamSelection(View):
         # The output of the 'map' is returned as a 'map' object, so needs
         # to be converted to a list.
         player_names = merge_sort(list(map(lambda z: z[0], cursor.fetchall())))
-        # print('unsorted: {}'.format(player_names))
-        # player_names = merge_sort(player_names)
-        # print('sorted: {}'.format(player_names))
 
         # creates a format which can be passed into the html
         context = Context({'player_names': player_names})
-        # print('context: {}'.format(context))
 
         # Adds the context to the correct place on the page, by passing into a
         # separate mini html file 'team_player_results.html'.
         return_str = render_to_string('team_player_results.html', context)
-        # print('returned string: {}'.format(return_str))
-
         return HttpResponse(
             json.dumps(return_str),
             content_type="application/json")
@@ -204,18 +166,7 @@ class Statistics(View):
         self.cursor = connection.cursor()
         # properties below will be used to construct the sql query
         self.table = ""
-        # self.column_name = ""
-        # self.column_names = ""
         self.results = []
-
-    def apost(self, request):
-        form = GeneralTextForm(request.POST, class_name="", id="hidden-input")
-        name = str(dict(request.POST)['general_input'][0])
-        context = Context({'name': name, 'statistics': stats})
-        return_str = render_to_string('statistics.html', context)
-        return HttpResponse(
-            json.dumps(return_str),
-            content_type="application/json")
 
     def get_matches_played(self, name):
         self.cursor.execute("""SELECT 'Matches Played', COUNT(*) FROM
@@ -266,8 +217,8 @@ class Statistics(View):
     def get_best_bowling(self, name):
         self.cursor.execute("""SELECT 'Best Bowling', r||'/'||w FROM (
                             SELECT SUM(CASE how_out WHEN '' THEN 0 ELSE 1 END) AS w,
-                            sum(runs) as r FROM scoring_ballbyball WHERE bowler=%s GROUP BY
-                            match_id_id ORDER BY w DESC LIMIT 1)""", [name])
+                            sum(runs) as r FROM scoring_ballbyball WHERE bowler=%s
+                            GROUP BY match_id_id ORDER BY w DESC LIMIT 1)""", [name])
         return self.cursor.fetchone()
 
     def get_bowling_economy(self, name):
@@ -279,6 +230,7 @@ class Statistics(View):
                             FROM scoring_ballbyball
                             WHERE bowler=%s)""", [name])
         return self.cursor.fetchone()
+
 
 class PlayerStatistics(Statistics, View):
 
@@ -325,101 +277,71 @@ class MatchDetails(ScoringInterface):
     View does not need to be inherited here since it is being inherited through
     the ScoringInterface class. The ScoringInterface class inherits View, so
     it does not need to be menitoned here again.
+
+    This is the view function to which the final POST request is made from the
+    client side for the part of the app where teams and players are being selected.
+    This will not be an AJAX POST but a normal HTTP POST. The job of this
+    View class is to take all the details that have been input and put them in
+    the correct location within the database so as to prepare the system to start
+    scoring the actual game.
     """
 
     def __init__(self):
+        # initialises the parent class ScoringInterface which is being inherited
         super().__init__()
+        # opens up a database connection
         self.cursor = connection.cursor()
-    # possibly use inheritance here to get the GET function from the
-    # file in the scoring folder?????
-    # send any posting requests to that file
 
-    # def get(self, request):
-        # print('MATCH DETAILS GET')
-        # return render(request, 'base.html')
-
+    # When a POST request is made to this view class, the POST request is
+    # redirected to the post function below. This is only possible because the
+    # class is inheriting the View class from DJANGO. The data being sent in the
+    # POST request is being passed into the request parameter in the post
+    # function below.
     def post(self, request):
-        print('MATCH DETAILS POST')
-
-        print(type(request.POST))
+        # Converts the posted data's format to a dictionary to make it easier to
+        # manipulate and extract values from.
         match_details = dict(request.POST)
         print('MATCH DETAILS DICTIONARY SUBMISSION: {}'.format(match_details))
-        # team_id_get = "SELECT * FROM searching_team WHERE team_name = %s
-        # home_team_id = Team.objects
+        #
         if match_details['ground_location'] == 'home':
             self.cursor.execute("""SELECT home_ground FROM searching_team
-                                WHERE id=%s;""" %
-                                (int(match_details['home_team'][0])))
+                                WHERE id=%s;""",[int(match_details['home_team'][0])])
         else:
             self.cursor.execute("""SELECT home_ground FROM searching_team
                                 WHERE id=%s;""" %
                                 (int(match_details['away_team'][0])))
         match_details['ground_location'] = self.cursor.fetchone()[0]
-        print('MATCH DETAILS DICTIONARY ALTERNATION: {}'.format(match_details))
-
-        print(match_details['ground_location'],
-                   match_details['umpire_1'][0],
-              match_details['umpire_2'][0],
-              match_details['weather'][0],
-              match_details['away_team'],
-              match_details['home_team'],
-              match_details['batting_first'][0],
-              match_details['overs'])
 
         # All the non integer data types need to be converted specific
-        print("""INSERT INTO searching_match
-                            (date, ground_location, umpire_1, umpire_2, weather,
-                            away_team_id, home_team_id, batting_first, overs)
-                            VALUES (DATE('now'), %s, %s, %s, %s, %s, %s,
-                            %s, %s)""" % (str(match_details['ground_location']),
-                                          str(match_details['umpire_1'][0]),
-                                          str(match_details['umpire_2'][0]),
-                                          int(match_details['weather'][0]),
-                                          int(match_details['away_team'][0]),
-                                          int(match_details['home_team'][0]),
-                                          str(match_details['batting_first'][0]),
-                                          int(match_details['overs'][0])))
-
         self.cursor.execute("""INSERT INTO searching_match
                             (date, ground_location, umpire_1, umpire_2, weather,
                             away_team_id, home_team_id, batting_first, overs)
                             VALUES (DATE('now'), %s, %s, %s, %s, %s, %s,
                             %s, %s)""", [match_details['ground_location'],
-                                            match_details['umpire_1'][0],
-                                            match_details['umpire_2'][0],
-                                            match_details['weather'][0],
-                                            int(match_details['away_team'][0]),
-                                            int(match_details['home_team'][0]),
-                                            match_details['batting_first'][0],
-                                            int(match_details['overs'][0])])
+                                         match_details['umpire_1'][0],
+                                         match_details['umpire_2'][0],
+                                         match_details['weather'][0],
+                                         int(match_details['away_team'][0]),
+                                         int(match_details['home_team'][0]),
+                                         match_details['batting_first'][0],
+                                         int(match_details['overs'][0])])
         # Add all the players name to match team player with match id and
         # team id
-        all_players = match_details["home_team_teamsheet"][0].split(',') + match_details["away_team_teamsheet"][0].split(',')
+        all_players = match_details["home_team_teamsheet"][0].split(',')
+        all_players +=  match_details["away_team_teamsheet"][0].split(',')
 
         for player in all_players:
-            print(player)
             self.cursor.execute("""SELECT id,current_team_name_id FROM
                                 searching_player WHERE player_name =%s""",
                                 [player])
-            # y = self.cursor.fetchone()
-            # print(type(y))
-            # print(y)
             player_id, team_id = self.cursor.fetchone()
-            print(team_id)
             self.cursor.execute("""SELECT id FROM searching_match
                                 ORDER BY id DESC LIMIT 1""")
             match_id = self.cursor.fetchone()[0]
-            print(match_id)
-            print('Player id = {}, Team id = {}, Match id = {}'.format(
-                player_id, team_id, match_id))
             self.cursor.execute("""INSERT INTO searching_MatchTeamPlayer
                                 (player_id_id, team_id_id, match_id_id)
                                 VALUES (%s, %s, %s)""",
                                 [int(player_id), int(team_id), int(match_id)])
-#            mtp = MatchTeamPlayer(player_id=int(player_id),
-#                                  team_id=int(team_id),
-#                                  match_id=int(match_id))
-#            mtp.save()
             # issue - the playerslists are being reutned as one long string
 
         # prepares ball-by-ball db for scoring by loading up the latest added
@@ -430,46 +352,3 @@ class MatchDetails(ScoringInterface):
                             ((SELECT id AS match_id_id FROM searching_match
                             ORDER BY match_id_id DESC LIMIT 1),0,0,0,0,0,0,1)""")
         return HttpResponseRedirect("/scoring/")
-        # return render(request, 'scoring.html')
-
-
-class AjaxTest(View):
-
-    def get(self, request):
-        form = AjaxTestForm()
-        params = dict()
-        params["search"] = form
-        print('GET VALID')
-        return render(request, 'ajax_test.html', params)
-
-    def post(self, request):
-        print('POST VALID')
-        form = AjaxTestForm(request.POST)
-
-        if form.is_valid():
-            # check POC for comment details
-            print('SEARCH IS VALID')
-
-            # takes the searched for text from the POST request
-            query = form.cleaned_data['query']
-            print('query: {}'.format(query))
-
-            team_names = list(Team.objects.filter(team_name__icontains=query))
-
-            # creates a format which can be passed into into the html
-            context = Context({"query": query, "team_names": team_names})
-            print('context: {}'.format(context))
-
-            # Adds the context to the correct place in the
-            return_str = render_to_string('search_results.html', context)
-            print('return str: {}'.format(return_str))
-
-            return HttpResponse(json.dumps(return_str),
-                                content_type="application/json")
-        else:
-            return HttpResponse(json.dumps(""), content_type="application/json")
-
-
-if __name__ == "__main__":
-    print('hi')
-    print(TeamnameSearchForm)

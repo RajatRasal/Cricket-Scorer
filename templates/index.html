@@ -1,8 +1,6 @@
 {% extends "./base.html" %}
 {% load staticfiles %}
 
-{% comment %} http://www.webhook.com/docs/template-inheritance-blocks/ {% endcomment %}
-
 {% block head_js %}
 {% endblock %}
 
@@ -17,10 +15,12 @@
 
 	<!-- Selection Menu -->
 	<div class="w3-content w3-justify w3-text-grey w3-padding-64">
-		<!--button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#match-details" onclick="alert('here');">Start Scoring</button><br-->
-		<button type="button" class="btn btn-default btn-lg btn-block" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#match-setup">Start Scoring</button><br>
-		<button type="button" class="btn btn-default btn-lg btn-block" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#player-details">Players</button><br>
-		<button type="button" class="btn btn-default btn-lg btn-block" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#team-details">Teams</button>
+		<button type="button" class="btn btn-default btn-lg btn-block" data-backdrop="static" 
+		data-keyboard="false" data-toggle="modal" data-target="#match-setup">Start Scoring</button><br>
+		<button type="button" class="btn btn-default btn-lg btn-block" data-backdrop="static" 
+		data-keyboard="false" data-toggle="modal" data-target="#player-details">Players</button><br>
+		<button type="button" class="btn btn-default btn-lg btn-block" data-backdrop="static"
+		 data-keyboard="false" data-toggle="modal" data-target="#team-details">Teams</button>
 	</div>
 </div>
 

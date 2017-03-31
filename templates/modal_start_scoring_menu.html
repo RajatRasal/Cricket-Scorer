@@ -22,6 +22,8 @@
 							</div>
 						</div><br>
 					</form>
+					<!-- overflow:scroll means that the box should scroll if values inside 
+					it do not fit in the specified height of around 200px.-->
 					<div class="col-md-12 column teams" style="position:relative; max-height:200px; overflow-y:scroll;"> 
 						<form method="POST" id="team-name-selection-form" action="">
 							{% csrf_token %}
